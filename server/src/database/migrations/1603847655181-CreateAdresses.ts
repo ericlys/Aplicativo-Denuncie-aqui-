@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateDenunciations1603337227762
-  implements MigrationInterface {
+export default class CreateAdresses1603847655181 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'denunciations',
+        name: 'addresses',
         columns: [
           {
             name: 'id',
@@ -16,33 +15,46 @@ export default class CreateDenunciations1603337227762
             isNullable: false,
           },
           {
-            name: 'anonymous',
-            type: 'boolean',
-            default: false,
-          },
-          {
-            name: 'title',
+            name: 'address',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'description',
+            name: 'street',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'photo',
+            name: 'city',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'zipcode',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'number',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'complement',
             type: 'varchar',
             isNullable: true,
           },
           {
-            name: 'status',
-            type: 'varchar',
+            name: 'latitude',
+            type: 'decimal',
+            scale: 10,
+            precision: 12,
           },
           {
-            name: 'hour',
-            type: 'timestamp',
-            default: 'now()',
+            name: 'longitude',
+            type: 'decimal',
+            scale: 10,
+            precision: 12,
           },
           {
             name: 'created_at',
@@ -60,6 +72,6 @@ export default class CreateDenunciations1603337227762
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('denunciations');
+    await queryRunner.dropTable('addresses');
   }
 }

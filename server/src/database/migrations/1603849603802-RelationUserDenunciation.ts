@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export default class RelationUserDenunciation1603344353779
+export default class RelationUserDenunciation1603849603802
   implements MigrationInterface {
-  name = 'RelationUserDenunciation1603344353779';
+  name = 'RelationUserDenunciation1603849603802';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "denunciations" ADD "user_id" uuid`);

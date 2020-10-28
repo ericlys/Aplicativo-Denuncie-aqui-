@@ -4,13 +4,15 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Address from './Address';
 import User from './User';
 
 @Entity('denunciations')
-class Denunciations {
+class Denunciation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,28 +26,7 @@ class Denunciations {
   description: string;
 
   @Column()
-  address: string;
-
-  @Column()
-  street: string;
-
-  @Column()
-  city: string;
-
-  @Column()
-  zipcode: string;
-
-  @Column()
-  number: string;
-
-  @Column({ nullable: true })
-  complement: string | null;
-
-  @Column('numeric', { precision: 12, scale: 10 })
-  latitude: number;
-
-  @Column('numeric', { precision: 12, scale: 10 })
-  longitude: number;
+  status: string;
 
   @Column({ nullable: true })
   photo: string | null;
@@ -54,6 +35,12 @@ class Denunciations {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @OneToOne(() => Address, denunciation => denunciation.address)
+  address: Address;
+
+  @CreateDateColumn()
+  hour: Date;
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -61,4 +48,4 @@ class Denunciations {
   updated_at: Date;
 }
 
-export default Denunciations;
+export default Denunciation;
