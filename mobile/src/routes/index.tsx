@@ -10,7 +10,7 @@ const AuthRoutes: React.FC = () =>
 <Auth.Navigator
   screenOptions={{
     headerShown: false,
-    cardStyle: {backgroundColor: '#312e38'}
+    cardStyle: {backgroundColor: '#FFFF'}
   }}>
   <Auth.Screen name="SingnIn" component={SingnIn}/>
   <Auth.Screen name="SingnUp" component={SingnUp}/>
