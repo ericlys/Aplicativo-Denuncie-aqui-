@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +22,12 @@ import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const emailInputRef = useRef<TextInput>(null);
+  const emailConfirmInputRef = useRef<TextInput>(null);
+  const cpfInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+  const passwordConfirmInputRef = useRef<TextInput>(null);
 
   return (
     <>
@@ -49,24 +56,81 @@ const SignUp: React.FC = () => {
                 console.log(data);
               }}
             >
-              <Input name="name" icon="user" placeholder="Nome" />
-
-              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input
+                autoCapitalize="words"
+                name="name"
+                icon="user"
+                placeholder="Nome"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  emailInputRef.current?.focus();
+                }}
+              />
 
               <Input
+                ref={emailInputRef}
+                keyboardType="email-address"
+                autoCorrect={false}
+                autoCapitalize="none"
+                name="email"
+                icon="mail"
+                placeholder="E-mail"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  emailConfirmInputRef.current?.focus();
+                }}
+              />
+
+              <Input
+                ref={emailConfirmInputRef}
+                keyboardType="email-address"
+                autoCorrect={false}
+                autoCapitalize="none"
                 name="confirmEmail"
                 icon="mail"
                 placeholder="Confirmar E-mail"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  cpfInputRef.current?.focus();
+                }}
               />
 
-              <Input name="cpf" icon="user" placeholder="CPF" />
-
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input
+                ref={cpfInputRef}
+                keyboardType="numeric"
+                name="cpf"
+                icon="user"
+                placeholder="CPF"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
+              />
 
               <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Senha"
+                textContentType="newPassword"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordConfirmInputRef.current?.focus();
+                }}
+              />
+
+              <Input
+                ref={passwordConfirmInputRef}
+                secureTextEntry
                 name="confirmpassword"
                 icon="lock"
                 placeholder="Confirmar senha"
+                textContentType="newPassword"
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
               />
 
               <Button
