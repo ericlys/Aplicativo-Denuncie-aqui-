@@ -1,9 +1,9 @@
 import React from 'react';
-import { RawButtonProperties } from 'react-native-gesture-handler';
+import { RectButtonProperties } from 'react-native-gesture-handler';
 
 import { Container, ButtonText } from './styles';
 
-interface ButtonProps extends RawButtonProperties {
+interface ButtonProps extends RectButtonProperties {
   children: string;
 }
 
