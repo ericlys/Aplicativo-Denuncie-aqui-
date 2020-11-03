@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
   Image,
   View,
@@ -6,11 +6,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+
+import getValidationErrors from '../../utils/getValidationErros';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -18,6 +22,15 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.png';
 
 import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
+
+interface SingUpFormData {
+  name: string;
+  email: string;
+  confirmEmail: string;
+  cpf: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
@@ -28,6 +41,46 @@ const SignUp: React.FC = () => {
   const cpfInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const passwordConfirmInputRef = useRef<TextInput>(null);
+
+  const handleSignUp = useCallback(async (data: SingUpFormData) => {
+    try {
+      formRef.current?.setErrors({});
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome obrigatório'),
+        email: Yup.string()
+          .required('Email obrigatório')
+          .email('Digite um e-mail válido'),
+        confirmEmail: Yup.string()
+          .email('Digite um e-mail válido')
+          .oneOf([Yup.ref('email')], 'Confirmar o email é obrigatório'),
+        cpf: Yup.string()
+          .required('CPF obrigatório')
+          .matches(/^[0-9]+$/, 'Must be only digits')
+          .length(11, 'Deve conter 11  dígitos'),
+        password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+        confirmPassword: Yup.string()
+          .min(6, 'No mínimo 6 dígitos')
+          .oneOf([Yup.ref('password')], 'Confirmar senha é obrigatório'),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+
+        formRef.current?.setErrors(errors);
+
+        return;
+      }
+
+      Alert.alert(
+        'Erro no cadastro',
+        'Ocorreu um erro ao fazer cadastro, tente novamente.',
+      );
+    }
+  }, []);
 
   return (
     <>
@@ -50,12 +103,7 @@ const SignUp: React.FC = () => {
             <View>
               <Title>Crie sua conta</Title>
             </View>
-            <Form
-              ref={formRef}
-              onSubmit={(data) => {
-                console.log(data);
-              }}
-            >
+            <Form ref={formRef} onSubmit={handleSignUp}>
               <Input
                 autoCapitalize="words"
                 name="name"
@@ -123,7 +171,7 @@ const SignUp: React.FC = () => {
               <Input
                 ref={passwordConfirmInputRef}
                 secureTextEntry
-                name="confirmpassword"
+                name="confirmPassword"
                 icon="lock"
                 placeholder="Confirmar senha"
                 textContentType="newPassword"
