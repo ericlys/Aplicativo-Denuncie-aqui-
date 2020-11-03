@@ -43,55 +43,57 @@ const SignUp: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const passwordConfirmInputRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(async (data: SingUpFormData) => {
-    try {
-      formRef.current?.setErrors({});
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string()
-          .required('Email obrigatório')
-          .email('Digite um e-mail válido'),
-        confirmEmail: Yup.string()
-          .email('Digite um e-mail válido')
-          .oneOf([Yup.ref('email')], 'Confirmar o email é obrigatório'),
-        cpf: Yup.string()
-          .required('CPF obrigatório')
-          .matches(/^[0-9]+$/, 'Must be only digits')
-          .length(11, 'Deve conter 11  dígitos'),
-        password: Yup.string().min(6, 'No mínimo 6 dígitos'),
-        confirmPassword: Yup.string()
-          .min(6, 'No mínimo 6 dígitos')
-          .oneOf([Yup.ref('password')], 'Confirmar senha é obrigatório'),
-      });
+  const handleSignUp = useCallback(
+    async (data: SingUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('Email obrigatório')
+            .email('Digite um e-mail válido'),
+          confirmEmail: Yup.string()
+            .email('Digite um e-mail válido')
+            .oneOf([Yup.ref('email')], 'Confirmar o email é obrigatório'),
+          cpf: Yup.string()
+            .required('CPF obrigatório')
+            .matches(/^[0-9]+$/, 'Must be only digits')
+            .length(11, 'Deve conter 11  dígitos'),
+          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+          confirmPassword: Yup.string()
+            .min(6, 'No mínimo 6 dígitos')
+            .oneOf([Yup.ref('password')], 'Confirmar senha é obrigatório'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      const a = await api.post('/users', data);
-      console.log(a);
-      console.log(data);
-      Alert.alert(
-        'Cadastro realizado com sucesso!',
-        'entre no seu email para confirmar e poder faser login na aplicação!',
-      );
+        await api.post('/users', data);
 
-      navigation.goBack();
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        Alert.alert(
+          'Cadastro realizado com sucesso!',
+          'entre no seu email para confirmar e poder faser login na aplicação!',
+        );
 
-        formRef.current?.setErrors(errors);
+        navigation.goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
 
-        return;
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro no cadastro',
+          'Ocorreu um erro ao fazer cadastro, tente novamente.',
+        );
       }
-
-      Alert.alert(
-        'Erro no cadastro',
-        'Ocorreu um erro ao fazer cadastro, tente novamente.',
-      );
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
