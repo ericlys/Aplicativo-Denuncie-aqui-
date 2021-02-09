@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 import { cpf } from 'cpf-cnpj-validator';
-import User from '../models/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 interface Request {
   name: string;

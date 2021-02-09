@@ -7,7 +7,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import Denunciation from './Denunciation';
+import Denunciation from '@modules/denunciations/infra/typeorm/entities/Denunciation';
 
 @Entity('users')
 class User {

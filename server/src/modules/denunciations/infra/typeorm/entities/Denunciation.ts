@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import Address from './Address';
-import User from './User';
+import User from '@modules/users/infra/typeorm/entities/User';
+import Address from '@modules/denunciations/infra/typeorm/entities/Address';
 
 @Entity('denunciations')
 class Denunciation {

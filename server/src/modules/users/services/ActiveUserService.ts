@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import User from '../models/User';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 class CreateUserService {
   public async execute(token: string): Promise<boolean> {

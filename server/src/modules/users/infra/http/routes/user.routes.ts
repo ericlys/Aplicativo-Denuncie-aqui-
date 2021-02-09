@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import Mail from '../lib/Mail';
-import CreateUserService from '../services/CreateUserService';
-import ActiveUserService from '../services/ActiveUserService';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import ActiveUserService from '@modules/users/services/ActiveUserService';
+import Mail from '@modules/users/infra/http/lib/Mail';
 
 const usersRouters = Router();
 
