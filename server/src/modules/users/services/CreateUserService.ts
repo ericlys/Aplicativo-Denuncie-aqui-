@@ -1,9 +1,9 @@
-import { getRepository } from 'typeorm';
-import { hash } from 'bcryptjs';
-import { cpf } from 'cpf-cnpj-validator';
 import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
+import { cpf } from 'cpf-cnpj-validator';
+import { hash } from 'bcryptjs';
 
-interface Request {
+interface IRequest {
   name: string;
   email: string;
   cpf_num: string;
@@ -12,18 +12,18 @@ interface Request {
 }
 
 class CreateUserService {
+
+  constructor(private usersRepository: IUsersRepository){}
+
   public async execute({
     name,
     email,
     cpf_num,
     password,
     administrator = false,
-  }: Request): Promise<User> {
-    const usersRepository = getRepository(User);
+  }: IRequest): Promise<User> {
 
-    const checkUserExists = await usersRepository.findOne({
-      where: { email },
-    });
+    const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
       throw new Error('Email address already used.');
@@ -34,25 +34,21 @@ class CreateUserService {
       throw new Error('Invalid CPF.');
     }
 
-    const checkCpfExists = await usersRepository.findOne({
-      where: { cpf: cpf.format(cpf_num) },
-    });
+    const checkCpfExists = await this.usersRepository.findByCPF(cpf.format(cpf_num));
 
     if (checkCpfExists) {
       throw new Error('Cpf already used.');
     }
 
     const hashedPassword = await hash(password, 8);
-
-    const user = usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
-      cpf: cpf.format(cpf_num),
+      cpf_num: cpf.format(cpf_num),
       password: hashedPassword,
       administrator,
     });
 
-    await usersRepository.save(user);
 
     return user;
   }

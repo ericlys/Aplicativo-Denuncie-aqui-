@@ -1,19 +1,17 @@
-import { getRepository } from 'typeorm';
-import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 class CreateUserService {
-  public async execute(token: string): Promise<boolean> {
-    const usersRepository = getRepository(User);
 
-    const checkUserExists = await usersRepository.findOne({
-      where: { id: token },
-    });
+  constructor(private usersRepository: IUsersRepository){}
+
+  public async execute(token: string): Promise<boolean> {
+    const checkUserExists = await this.usersRepository.findById(token);
 
     if (!checkUserExists) {
       throw new Error('Invalid token.');
     }
 
-    await usersRepository.update({ id: token }, { checked: true });
+    await this.usersRepository.activate(token);
 
     return true;
   }
