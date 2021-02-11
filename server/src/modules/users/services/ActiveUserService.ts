@@ -1,8 +1,13 @@
 import IUsersRepository from '../repositories/IUsersRepository';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 class CreateUserService {
 
-  constructor(private usersRepository: IUsersRepository){}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    ){}
 
   public async execute(token: string): Promise<boolean> {
     const checkUserExists = await this.usersRepository.findById(token);

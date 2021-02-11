@@ -2,7 +2,8 @@ import { Router } from 'express';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ActiveUserService from '@modules/users/services/ActiveUserService';
 import Mail from '@modules/users/infra/http/lib/Mail';
-import UsersRepository from '@modules/users/infra/repositories/UsersRepository';
+import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
+import { container } from 'tsyringe';
 
 const usersRouters = Router();
 
@@ -11,8 +12,7 @@ usersRouters.post('/', async (request, response) => {
   try {
     const { name, email, cpf, password, administrator } = request.body;
 
-    const usersRepository = new UsersRepository();
-    const createUser = new CreateUserService(usersRepository);
+    const createUser = container.resolve(CreateUserService);
 
     const user = await createUser.execute({
       name,
@@ -39,8 +39,7 @@ usersRouters.post('/', async (request, response) => {
 usersRouters.get('/activation/:token', async (request, response) => {
   try {
     const { token } = request.params;
-    const usersRepository = new UsersRepository();
-    const activeUser = new ActiveUserService(usersRepository);
+    const activeUser = container.resolve(ActiveUserService);
     activeUser.execute(token);
     return response.status(200).send('usuario ativado');
   } catch (err) {

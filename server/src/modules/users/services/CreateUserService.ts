@@ -1,5 +1,7 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
+import { injectable, inject } from 'tsyringe';
+
 import { cpf } from 'cpf-cnpj-validator';
 import { hash } from 'bcryptjs';
 
@@ -11,9 +13,13 @@ interface IRequest {
   administrator: boolean;
 }
 
+@injectable()
 class CreateUserService {
 
-  constructor(private usersRepository: IUsersRepository){}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    ){}
 
   public async execute({
     name,
