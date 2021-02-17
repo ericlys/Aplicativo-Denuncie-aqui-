@@ -1,6 +1,7 @@
 import Denunciation from '../infra/typeorm/entities/Denunciation';
+import ICreateDenunciationDTO from '../dtos/ICreateDenunciationDTO'
 
 export default interface IDenunciationsRepository {
-  create(): Promise<Denunciation>;
-  delete(denunciation: Denunciation): Promise<undefined>;
+  create(data: ICreateDenunciationDTO): Promise<Denunciation>;
+  save(denunciation: Denunciation): Promise<Denunciation>;
 }
