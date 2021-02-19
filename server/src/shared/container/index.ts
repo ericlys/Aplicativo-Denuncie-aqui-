@@ -1,4 +1,4 @@
-import {container} from 'tsyringe';
+import { container } from 'tsyringe';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
@@ -8,16 +8,16 @@ import IAddressesRepository from '@modules/denunciations/repositories/IAddresses
 import AddressesRepository from '@modules/denunciations/infra/typeorm/repositories/AddressesRepository';
 
 container.registerSingleton<IUsersRepository>(
-  'UsersRepository', 
-  UsersRepository
-  );
+  'UsersRepository',
+  UsersRepository,
+);
 
-  container.registerSingleton<IDenunciationsRepository>(
-  'DenunciationsRepository', 
-  DenunciationsRepository
-  );
-  
-  container.registerSingleton<IAddressesRepository>(
-  'AddressesRepository', 
-  AddressesRepository
-  );
+container.registerSingleton<IDenunciationsRepository>(
+  'DenunciationsRepository',
+  DenunciationsRepository,
+);
+
+container.registerSingleton<IAddressesRepository>(
+  'AddressesRepository',
+  AddressesRepository,
+);
