@@ -6,6 +6,8 @@ import IDenunciationsRepository from '@modules/denunciations/repositories/IDenun
 import DenunciationsRepository from '@modules/denunciations/infra/typeorm/repositories/DenunciationsRepository';
 import IAddressesRepository from '@modules/denunciations/repositories/IAddressesRepository';
 import AddressesRepository from '@modules/denunciations/infra/typeorm/repositories/AddressesRepository';
+import ICategoriesRepository from '@modules/denunciations/repositories/ICategoriesRepository';
+import CategoriesRepository from '@modules/denunciations/infra/typeorm/repositories/CategoriesRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -20,4 +22,9 @@ container.registerSingleton<IDenunciationsRepository>(
 container.registerSingleton<IAddressesRepository>(
   'AddressesRepository',
   AddressesRepository,
+);
+
+container.registerSingleton<ICategoriesRepository>(
+  'CategoriesRepository',
+  CategoriesRepository,
 );

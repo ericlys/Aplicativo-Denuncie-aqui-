@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateDenunciationService from '@modules/denunciations/services/CreateDenunciationService';
@@ -6,9 +6,17 @@ import ActiveUserService from '@modules/users/services/ActiveUserService';
 
 export default class DenunciationsController {
   public async create(request: Request, response: Response): Promise<Response> {
-
     try {
-      const { anonymous, title, description, status, photo, user, address, hour } = request.body;
+      const {
+        anonymous,
+        title,
+        description,
+        status,
+        photo,
+        user,
+        address,
+        hour,
+      } = request.body;
 
       const CreateDenunciation = container.resolve(CreateDenunciationService);
 
@@ -39,5 +47,4 @@ export default class DenunciationsController {
       return response.status(400).json({ error: err.message });
     }
   }
-
 }

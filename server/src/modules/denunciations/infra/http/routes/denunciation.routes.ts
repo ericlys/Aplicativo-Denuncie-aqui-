@@ -9,6 +9,6 @@ const denunciationsController = new DenunciationsController();
 denunciationsRouters.use(ensureAuthenticated);
 
 denunciationsRouters.post('/', denunciationsController.create);
-denunciationsRouters.get('/activation/:token', denunciationsController.index)
+denunciationsRouters.get('/activation/:token', denunciationsController.index);
 
 export default denunciationsRouters;
