@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Denunciation from './Denunciation';
 
 @Entity('categories')
 class Category {
@@ -14,8 +17,14 @@ class Category {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   icon: string;
+
+  @OneToMany(() => Denunciation, denunciations => denunciations.category, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn({ name: 'category_id' })
+  denunciations: Denunciation[];
 
   @CreateDateColumn()
   created_at: Date;

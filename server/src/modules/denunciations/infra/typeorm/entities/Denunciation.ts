@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import User from '@modules/users/infra/typeorm/entities/User';
 import Address from '@modules/denunciations/infra/typeorm/entities/Address';
+import Category from './Category';
 
 @Entity('denunciations')
 class Denunciation {
@@ -34,6 +35,10 @@ class Denunciation {
   @ManyToOne(() => User, user => user.denunciations)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Category, category => category.denunciations)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @OneToOne(() => Address, denunciation => denunciation.address)
   address: Address;
