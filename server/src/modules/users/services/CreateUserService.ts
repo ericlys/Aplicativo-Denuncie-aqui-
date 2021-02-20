@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe';
 
 import { cpf } from 'cpf-cnpj-validator';
 import { hash } from 'bcryptjs';
+import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -30,12 +31,12 @@ class CreateUserService {
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
-      throw new Error('Email address already used.');
+      throw new AppError('Email address already used.');
     }
 
     const checkCpf = cpf.isValid(cpf_num);
     if (!checkCpf) {
-      throw new Error('Invalid CPF.');
+      throw new AppError('Invalid CPF.');
     }
 
     const checkCpfExists = await this.usersRepository.findByCPF(
@@ -43,7 +44,7 @@ class CreateUserService {
     );
 
     if (checkCpfExists) {
-      throw new Error('Cpf already used.');
+      throw new AppError('Cpf already used.');
     }
 
     const hashedPassword = await hash(password, 8);

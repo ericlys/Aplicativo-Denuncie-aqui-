@@ -1,8 +1,11 @@
 import { injectable, inject } from 'tsyringe';
+import AppError from '@shared/errors/AppError';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import Address from '../infra/typeorm/entities/Address';
 import IDenunciationsRepository from '../repositories/IDenunciationsRepository';
 import IAddressesRepository from '../repositories/IAddressesRepository';
 import Denunciation from '../infra/typeorm/entities/Denunciation';
+import ICategoriesRepository from '../repositories/ICategoriesRepository';
 
 interface IRequest {
   anonymous: boolean;
@@ -23,9 +26,27 @@ class CreateDenunciationService {
     private denunciationsRepository: IDenunciationsRepository,
     @inject('AddressesRepository')
     private addressesRepositorynsRepository: IAddressesRepository,
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+    @inject('CategoriesRepository')
+    private categoriesRepository: ICategoriesRepository,
   ) {}
 
   public async execute(data: IRequest): Promise<Denunciation> {
+    const checkUserId = await this.usersRepository.findById(data.user_id);
+
+    if (!checkUserId) {
+      throw new AppError('Error identifying user', 401);
+    }
+
+    const checkCategoryId = await this.categoriesRepository.findById(
+      data.category_id,
+    );
+
+    if (!checkCategoryId) {
+      throw new AppError('Error in category identification', 400);
+    }
+
     const denunciation = await this.denunciationsRepository.create({
       anonymous: data.anonymous,
       description: data.description,

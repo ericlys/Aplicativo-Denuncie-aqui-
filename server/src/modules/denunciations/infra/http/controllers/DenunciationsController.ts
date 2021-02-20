@@ -6,47 +6,39 @@ import ActiveUserService from '@modules/users/services/ActiveUserService';
 
 export default class DenunciationsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    try {
-      const {
-        anonymous,
-        title,
-        description,
-        status,
-        photo,
-        user_id,
-        address,
-        hour,
-        category_id,
-      } = request.body;
+    const {
+      anonymous,
+      title,
+      description,
+      status,
+      photo,
+      user_id,
+      address,
+      hour,
+      category_id,
+    } = request.body;
 
-      const CreateDenunciation = container.resolve(CreateDenunciationService);
+    const CreateDenunciation = container.resolve(CreateDenunciationService);
 
-      const denunciation = await CreateDenunciation.execute({
-        anonymous,
-        title,
-        description,
-        status,
-        photo,
-        user_id,
-        address,
-        hour,
-        category_id,
-      });
+    const denunciation = await CreateDenunciation.execute({
+      anonymous,
+      title,
+      description,
+      status,
+      photo,
+      user_id,
+      address,
+      hour,
+      category_id,
+    });
 
-      return response.json(denunciation);
-    } catch (err) {
-      return response.status(400).json({ error: err.message });
-    }
+    return response.json(denunciation);
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
-    try {
-      const { token } = request.params;
-      const activeUser = container.resolve(ActiveUserService);
-      activeUser.execute(token);
-      return response.status(200).send('usuario ativado');
-    } catch (err) {
-      return response.status(400).json({ error: err.message });
-    }
+    const { token } = request.params;
+    const activeUser = container.resolve(ActiveUserService);
+    activeUser.execute(token);
+    return response.status(200).send('usuario ativado');
   }
 }
