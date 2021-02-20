@@ -1,9 +1,9 @@
 import User from '@modules/users/infra/typeorm/entities/User';
-import IUsersRepository from '../repositories/IUsersRepository';
 import { injectable, inject } from 'tsyringe';
 
 import { cpf } from 'cpf-cnpj-validator';
 import { hash } from 'bcryptjs';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
   name: string;
@@ -15,11 +15,10 @@ interface IRequest {
 
 @injectable()
 class CreateUserService {
-
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
-    ){}
+  ) {}
 
   public async execute({
     name,
@@ -28,7 +27,6 @@ class CreateUserService {
     password,
     administrator = false,
   }: IRequest): Promise<User> {
-
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
@@ -40,7 +38,9 @@ class CreateUserService {
       throw new Error('Invalid CPF.');
     }
 
-    const checkCpfExists = await this.usersRepository.findByCPF(cpf.format(cpf_num));
+    const checkCpfExists = await this.usersRepository.findByCPF(
+      cpf.format(cpf_num),
+    );
 
     if (checkCpfExists) {
       throw new Error('Cpf already used.');
@@ -54,7 +54,6 @@ class CreateUserService {
       password: hashedPassword,
       administrator,
     });
-
 
     return user;
   }
