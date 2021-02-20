@@ -1,4 +1,3 @@
-import User from '@modules/users/infra/typeorm/entities/User';
 import { injectable, inject } from 'tsyringe';
 import Address from '../infra/typeorm/entities/Address';
 import IDenunciationsRepository from '../repositories/IDenunciationsRepository';
@@ -11,31 +10,31 @@ interface IRequest {
   description: string;
   status: string;
   photo: string | null;
-  user: User;
   address: Address;
   hour: Date;
+  user_id: string;
+  category_id: string;
 }
 
 @injectable()
 class CreateDenunciationService {
-
   constructor(
     @inject('DenunciationsRepository')
     private denunciationsRepository: IDenunciationsRepository,
     @inject('AddressesRepository')
     private addressesRepositorynsRepository: IAddressesRepository,
-    ){}
+  ) {}
 
   public async execute(data: IRequest): Promise<Denunciation> {
-
     const denunciation = await this.denunciationsRepository.create({
-      anonymous: data.anonymous, 
-      description: data.description, 
+      anonymous: data.anonymous,
+      description: data.description,
       hour: data.hour,
       photo: data.photo,
       status: data.status,
       title: data.title,
-      user_id: data.user.id,
+      user_id: data.user_id,
+      category_id: data.category_id,
     });
 
     const addres = {
@@ -47,11 +46,11 @@ class CreateDenunciationService {
       number: data.address.number,
       street: data.address.street,
       zipcode: data.address.zipcode,
-      denunciation: denunciation.id
-    }
+      denunciation: denunciation.id,
+    };
 
-  const a = await this.addressesRepositorynsRepository.create(addres);
-  
+    await this.addressesRepositorynsRepository.create(addres);
+
     return denunciation;
   }
 }

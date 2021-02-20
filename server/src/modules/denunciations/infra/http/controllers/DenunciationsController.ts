@@ -13,9 +13,10 @@ export default class DenunciationsController {
         description,
         status,
         photo,
-        user,
+        user_id,
         address,
         hour,
+        category_id,
       } = request.body;
 
       const CreateDenunciation = container.resolve(CreateDenunciationService);
@@ -26,9 +27,10 @@ export default class DenunciationsController {
         description,
         status,
         photo,
-        user,
+        user_id,
         address,
         hour,
+        category_id,
       });
 
       return response.json(denunciation);

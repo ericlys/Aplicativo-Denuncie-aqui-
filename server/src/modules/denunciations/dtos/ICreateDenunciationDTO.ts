@@ -6,4 +6,5 @@ export default interface ICreateDenunciationDTO {
   status: string;
   hour: Date;
   user_id: string;
+  category_id: string;
 }

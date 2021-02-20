@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export default class RelationCategoryDenunciation1613781159555
+export default class RelationCategoryDenunciation1613786165001
   implements MigrationInterface {
-  name = 'RelationCategoryDenunciation1613781159555';
+  name = 'RelationCategoryDenunciation1613786165001';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
