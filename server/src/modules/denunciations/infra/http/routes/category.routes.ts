@@ -13,5 +13,6 @@ cateroriesRouters.use(ensureAuthenticated);
 const upload = multer(uploadConfig);
 
 cateroriesRouters.post('/', upload.single('icon'), cateroriesController.create);
+cateroriesRouters.get('/', cateroriesController.index);
 
 export default cateroriesRouters;
