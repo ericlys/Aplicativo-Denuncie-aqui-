@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import User from '@modules/users/infra/typeorm/entities/User';
 import Address from '@modules/denunciations/infra/typeorm/entities/Address';
+
+import { Expose } from 'class-transformer';
 import Category from './Category';
 
 @Entity('denunciations')
@@ -51,6 +53,11 @@ class Denunciation {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'photo_url' })
+  getAvatarUrl(): string | null {
+    return this.photo ? `${process.env.APP_API_URL}/files/${this.photo}` : null;
+  }
 }
 
 export default Denunciation;

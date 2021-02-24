@@ -16,6 +16,6 @@ denunciationsRouters.post(
   upload.single('photo'),
   denunciationsController.create,
 );
-denunciationsRouters.get('/activation/:token', denunciationsController.index);
+denunciationsRouters.get('/', denunciationsController.index);
 
 export default denunciationsRouters;

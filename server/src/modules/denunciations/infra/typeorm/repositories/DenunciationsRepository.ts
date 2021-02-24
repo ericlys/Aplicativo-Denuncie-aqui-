@@ -39,5 +39,9 @@ class DenunciationsRepository implements IDenunciationsRepository {
   public async save(denunciation: Denunciation): Promise<Denunciation> {
     return this.ormRepository.save(denunciation);
   }
+
+  public async index(): Promise<Denunciation[]> {
+    return this.ormRepository.find();
+  }
 }
 export default DenunciationsRepository;

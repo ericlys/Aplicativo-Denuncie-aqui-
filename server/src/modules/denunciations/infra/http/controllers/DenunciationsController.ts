@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateDenunciationService from '@modules/denunciations/services/CreateDenunciationService';
-import ActiveUserService from '@modules/users/services/ActiveUserService';
+import ListDenunciationService from '@modules/denunciations/services/ListDenunciationService';
 
 export default class DenunciationsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -47,13 +48,12 @@ export default class DenunciationsController {
       zipcode,
     });
 
-    return response.json(denunciation);
+    return response.json(classToClass(denunciation));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
-    const { token } = request.params;
-    const activeUser = container.resolve(ActiveUserService);
-    activeUser.execute(token);
-    return response.status(200).send('usuario ativado');
+    const listDenunciations = container.resolve(ListDenunciationService);
+    const denunciations = await listDenunciations.execute();
+    return response.json(classToClass(denunciations));
   }
 }

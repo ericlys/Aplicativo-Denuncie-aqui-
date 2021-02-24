@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
 import Mail from '@modules/users/infra/http/lib/Mail';
@@ -21,11 +22,9 @@ export default class UsersController {
     await Mail.sendMail({
       to: user.email,
       subject: 'Confirmação de conta',
-      html: `<a href="<a href="http://localhost:3333/users/activation/${user.id}">Clique aqui para confirmar sua conta</a>`,
+      html: `<a href="<a href="${process.env.APP_API_URL}/users/activation/${user.id}">Clique aqui para confirmar sua conta</a>`,
     });
 
-    delete user.password;
-
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 }

@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Expose } from 'class-transformer';
 import Denunciation from './Denunciation';
 
 @Entity('categories')
@@ -31,6 +32,11 @@ class Category {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'icon_url' })
+  getAvatarUrl(): string | null {
+    return this.icon ? `${process.env.APP_API_URL}/files/${this.icon}` : null;
+  }
 }
 
 export default Category;

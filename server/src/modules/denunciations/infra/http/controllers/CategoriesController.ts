@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateCategoryService from '@modules/denunciations/services/CreateCategoryService';
 import ListCategoryService from '@modules/denunciations/services/ListCategoryService';
@@ -16,12 +17,12 @@ export default class CategoriesController {
       icon,
     });
 
-    return response.json(category);
+    return response.json(classToClass(category));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
     const listCategories = container.resolve(ListCategoryService);
     const categories = await listCategories.execute();
-    return response.json(categories);
+    return response.json(classToClass(categories));
   }
 }
