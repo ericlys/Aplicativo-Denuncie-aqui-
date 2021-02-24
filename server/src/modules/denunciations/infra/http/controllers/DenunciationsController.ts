@@ -11,12 +11,20 @@ export default class DenunciationsController {
       title,
       description,
       status,
-      photo,
       user_id,
-      address,
       hour,
       category_id,
+      address,
+      city,
+      complement,
+      latitude,
+      longitude,
+      number,
+      street,
+      zipcode,
     } = request.body;
+
+    const photoFilename = request.file.filename;
 
     const CreateDenunciation = container.resolve(CreateDenunciationService);
 
@@ -25,11 +33,18 @@ export default class DenunciationsController {
       title,
       description,
       status,
-      photo,
       user_id,
-      address,
       hour,
       category_id,
+      photoFilename,
+      address,
+      city,
+      complement,
+      latitude,
+      longitude,
+      number,
+      street,
+      zipcode,
     });
 
     return response.json(denunciation);
