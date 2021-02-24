@@ -5,7 +5,8 @@ import CreateCategoryService from '@modules/denunciations/services/CreateCategor
 
 export default class CategoriesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { title, icon } = request.body;
+    const { title } = request.body;
+    const icon = request.file.filename;
 
     const CreateCategory = container.resolve(CreateCategoryService);
 
