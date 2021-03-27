@@ -58,7 +58,10 @@ class CreateDenunciationService {
       throw new AppError('Error in category identification', 400);
     }
 
-    const filename = await this.storageProvider.saveFile(data.photoFilename);
+    let filename = null;
+    if (data.photoFilename) {
+      filename = await this.storageProvider.saveFile(data.photoFilename);
+    }
 
     const denunciation = await this.denunciationsRepository.create({
       anonymous: data.anonymous,
@@ -80,7 +83,7 @@ class CreateDenunciationService {
       number: data.number,
       street: data.street,
       zipcode: data.zipcode,
-      denunciation: denunciation.id,
+      denunciation,
     });
 
     return denunciation;

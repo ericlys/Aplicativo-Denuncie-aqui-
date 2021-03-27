@@ -25,7 +25,10 @@ export default class DenunciationsController {
       zipcode,
     } = request.body;
 
-    const photoFilename = request.file.filename;
+    let photoFilename = '';
+    if (request.file) {
+      photoFilename = request.file.filename;
+    }
 
     const CreateDenunciation = container.resolve(CreateDenunciationService);
 
