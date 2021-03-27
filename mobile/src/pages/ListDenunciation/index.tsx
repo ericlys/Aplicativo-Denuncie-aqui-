@@ -19,14 +19,14 @@ import {
 } from './styles';
 import api from '../../services/api';
 
-export interface Category {
+export interface ListDenunciation {
   id: string;
   title: string;
   icon_url: string;
 }
 
-const Dashbord: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+const ListDenunciation: React.FC = () => {
+  const [categories, setCategories] = useState([]);
 
   const { user } = useAuth();
   const { navigate } = useNavigation();
@@ -80,4 +80,4 @@ const Dashbord: React.FC = () => {
   );
 };
 
-export default Dashbord;
+export default ListDenunciation;

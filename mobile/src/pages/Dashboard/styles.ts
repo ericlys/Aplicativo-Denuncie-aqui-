@@ -1,6 +1,8 @@
 import styled from 'styled-components/native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RectButton } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native';
+import { Category } from './index';
 
 export const Container = styled.View`
   flex: 1;
@@ -36,7 +38,7 @@ export const UserAvatar = styled.Image`
   border-radius: 28px;
   background-color: #ff0202;
 `;
-export const CategoryList = styled.FlatList`
+export const CategoryList = styled(FlatList as new () => FlatList<Category>)`
   padding: 32px 24px 16px;
 `;
 
