@@ -152,7 +152,11 @@ const CreateDenunciation: React.FC = () => {
   }, []);
 
   const updateForm = useCallback((addres: IViacep) => {
+    const title = formRef.current.getFieldRef('title');
+    const description = formRef.current.getFieldRef('description');
     formRef.current?.setData({
+      title: title.value,
+      description: description.value,
       zipCode: addres?.cep,
       addres: addres?.logradouro,
       street: addres?.bairro,
