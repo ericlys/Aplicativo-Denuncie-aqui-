@@ -6,4 +6,6 @@ export default interface IDenunciationsRepository {
   save(denunciation: Denunciation): Promise<Denunciation>;
   index(): Promise<Denunciation[]>;
   findByUserId(id: string): Promise<Denunciation[]> | undefined;
+  findById(id: string): Promise<Denunciation>;
+  deleteById(id: string): void;
 }

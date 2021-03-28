@@ -20,6 +20,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
     title,
     user_id,
     category_id,
+    address,
   }: ICreateDenunciationDTO): Promise<Denunciation> {
     const denunciation = this.ormRepository.create({
       anonymous,
@@ -30,6 +31,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
       title,
       user: { id: user_id },
       category: { id: category_id },
+      address,
     });
 
     await this.ormRepository.save(denunciation);
@@ -44,8 +46,18 @@ class DenunciationsRepository implements IDenunciationsRepository {
     return this.ormRepository.find();
   }
 
-  findByUserId(id: string): Promise<Denunciation[]> {
+  public async findByUserId(id: string): Promise<Denunciation[]> {
     return this.ormRepository.find({ where: { user: id } });
+  }
+
+  public async findById(id: string): Promise<Denunciation> {
+    return this.ormRepository.findOne(id, {
+      relations: ['address', 'category'],
+    });
+  }
+
+  deleteById(id: string): void {
+    this.ormRepository.delete(id);
   }
 }
 export default DenunciationsRepository;

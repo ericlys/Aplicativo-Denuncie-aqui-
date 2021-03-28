@@ -18,5 +18,7 @@ denunciationsRouters.post(
 );
 denunciationsRouters.get('/', denunciationsController.index);
 denunciationsRouters.get('/my', denunciationsController.findByUser);
+denunciationsRouters.get('/:id', denunciationsController.findById);
+denunciationsRouters.delete('/:id', denunciationsController.delete);
 
 export default denunciationsRouters;

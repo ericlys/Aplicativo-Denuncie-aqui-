@@ -1,5 +1,3 @@
-import Denunciation from '../infra/typeorm/entities/Denunciation';
-
 export default interface ICreateAddressDTO {
   address: string;
   street: string;
@@ -9,5 +7,4 @@ export default interface ICreateAddressDTO {
   complement: string | null;
   latitude: number;
   longitude: number;
-  denunciation: Denunciation;
 }

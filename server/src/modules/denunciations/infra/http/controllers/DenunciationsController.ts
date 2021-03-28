@@ -5,6 +5,8 @@ import { classToClass } from 'class-transformer';
 import CreateDenunciationService from '@modules/denunciations/services/CreateDenunciationService';
 import ListDenunciationService from '@modules/denunciations/services/ListDenunciationService';
 import ListUserDenunciationService from '@modules/denunciations/services/ListUserDenunciationService';
+import findDenunciationService from '@modules/denunciations/services/FindDenunciationService';
+import deleteDenunciationService from '@modules/denunciations/services/DeleteDenunciationService';
 
 export default class DenunciationsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -71,5 +73,22 @@ export default class DenunciationsController {
     const user_id = request.user.id;
     const denunciations = await listUserDenunciations.execute(user_id);
     return response.json(classToClass(denunciations));
+  }
+
+  public async findById(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { id } = request.params;
+    const findDenunciation = container.resolve(findDenunciationService);
+    const denunciation = await findDenunciation.execute(id);
+    return response.json(classToClass(denunciation));
+  }
+
+  public delete(request: Request, response: Response): Response {
+    const { id } = request.params;
+    const deleteDenunciation = container.resolve(deleteDenunciationService);
+    deleteDenunciation.execute(id);
+    return response.json({ status: 'ok' });
   }
 }

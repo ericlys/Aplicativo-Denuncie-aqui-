@@ -1,3 +1,5 @@
+import Address from '../infra/typeorm/entities/Address';
+
 export default interface ICreateDenunciationDTO {
   anonymous: boolean;
   title: string;
@@ -7,4 +9,5 @@ export default interface ICreateDenunciationDTO {
   hour: Date;
   user_id: string;
   category_id: string;
+  address: Address;
 }

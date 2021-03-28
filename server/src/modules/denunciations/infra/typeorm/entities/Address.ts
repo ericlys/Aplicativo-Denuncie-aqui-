@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -39,7 +38,6 @@ class Address {
   longitude: number;
 
   @OneToOne(() => Denunciation, address => address)
-  @JoinColumn()
   denunciation: Denunciation;
 
   @CreateDateColumn()

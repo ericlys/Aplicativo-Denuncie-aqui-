@@ -63,6 +63,21 @@ class CreateDenunciationService {
       filename = await this.storageProvider.saveFile(data.photoFilename);
     }
 
+    const addres = await this.addressesRepositorynsRepository.create({
+      address: data.address,
+      city: data.city,
+      complement: data.complement,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      number: data.number,
+      street: data.street,
+      zipcode: data.zipcode,
+    });
+
+    if (!addres) {
+      return null;
+    }
+
     const denunciation = await this.denunciationsRepository.create({
       anonymous: data.anonymous,
       description: data.description,
@@ -72,18 +87,7 @@ class CreateDenunciationService {
       title: data.title,
       user_id: data.user_id,
       category_id: data.category_id,
-    });
-
-    await this.addressesRepositorynsRepository.create({
-      address: data.address,
-      city: data.city,
-      complement: data.complement,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      number: data.number,
-      street: data.street,
-      zipcode: data.zipcode,
-      denunciation,
+      address: addres,
     });
 
     return denunciation;

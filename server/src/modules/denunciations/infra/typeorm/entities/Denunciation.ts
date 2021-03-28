@@ -43,6 +43,7 @@ class Denunciation {
   category: Category;
 
   @OneToOne(() => Address, denunciation => denunciation.address)
+  @JoinColumn()
   address: Address;
 
   @CreateDateColumn()

@@ -5,26 +5,24 @@ export default class RelationDenunciationAddress1603850989423
   name = 'RelationDenunciationAddress1603850989423';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE "denunciations" ADD "addressId" uuid`);
     await queryRunner.query(
-      `ALTER TABLE "addresses" ADD "denunciationId" uuid`,
+      `ALTER TABLE "denunciations" ADD CONSTRAINT "UQ_7ebf4b5e4fa34d3658f9d9cbfaa"  UNIQUE ("addressId")`,
     );
     await queryRunner.query(
-      `ALTER TABLE "addresses" ADD CONSTRAINT "UQ_7ebf4b5e4fa34d3658f9d9cbfaa" UNIQUE ("denunciationId")`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "addresses" ADD CONSTRAINT "FK_7ebf4b5e4fa34d3658f9d9cbfaa" FOREIGN KEY ("denunciationId") REFERENCES "denunciations"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "denunciations" ADD CONSTRAINT "FK_7ebf4b5e4fa34d3658f9d9cbfaa" FOREIGN KEY ("addressId") REFERENCES "addresses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "addresses" DROP CONSTRAINT "FK_7ebf4b5e4fa34d3658f9d9cbfaa"`,
+      `ALTER TABLE "denunciations" DROP CONSTRAINT "FK_7ebf4b5e4fa34d3658f9d9cbfaa"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "addresses" DROP CONSTRAINT "UQ_7ebf4b5e4fa34d3658f9d9cbfaa"`,
+      `ALTER TABLE "denunciations" DROP CONSTRAINT "UQ_7ebf4b5e4fa34d3658f9d9cbfaa"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "addresses" DROP COLUMN "denunciationId"`,
+      `ALTER TABLE "denunciations" DROP COLUMN "addressId"`,
     );
   }
 }
