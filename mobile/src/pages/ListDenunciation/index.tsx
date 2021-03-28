@@ -1,49 +1,55 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-import { useAuth } from '../../hooks/auth';
+import Icon from 'react-native-vector-icons/Feather';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import {
-  Container,
   Header,
   HeaderTitle,
-  UserName,
-  ProfileButton,
-  UserAvatar,
-  CategoryList,
-  CategoryContainer,
-  CategoryImage,
-  CategoryInfo,
-  CategoryTitle,
-  CategoryListTitle,
+  Container,
+  BackButton,
+  DenunciationList,
+  DenunciationContainer,
+  DenunciationInfo,
+  DenunciationTitle,
+  DenunciationMeta,
+  DenunciationMetaDescription,
 } from './styles';
 import api from '../../services/api';
 
-export interface ListDenunciation {
+export interface Denunciation {
   id: string;
   title: string;
-  icon_url: string;
+  description: string;
+  hour: Date;
 }
 
 const ListDenunciation: React.FC = () => {
-  const [categories, setCategories] = useState([]);
+  const [denunciations, setDenunciations] = useState([]);
+  const navigation = useNavigation();
 
-  const { user } = useAuth();
   const { navigate } = useNavigation();
 
-  useEffect(() => {
-    api.get('category').then((response) => {
-      setCategories(response.data);
+  const formattedDate = useCallback((time: Date) => {
+    return format(time, "EEEE', dia' dd 'de' MMMM 'de' yyyy 'às' HH:mm'h'", {
+      locale: ptBR,
     });
   }, []);
 
-  const navigateToProfile = useCallback(() => {
-    navigate('Profile');
-  }, [navigate]);
+  useEffect(() => {
+    api.get('denunciation/my').then((response) => {
+      setDenunciations(response.data);
+    });
+  }, []);
 
-  const navigateToCreateDenunciation = useCallback(
-    (categoryId: string) => {
-      navigate('CreateDenunciation', { categoryId });
+  const hangleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const navigateToCreateDetails = useCallback(
+    (denunciationId: string) => {
+      navigate('ShowDenunciation', { denunciationId });
     },
     [navigate],
   );
@@ -51,29 +57,36 @@ const ListDenunciation: React.FC = () => {
   return (
     <Container>
       <Header>
-        <HeaderTitle>
-          Bem vindo, {'\n'}
-          <UserName>{user.name}</UserName>
-        </HeaderTitle>
+        <BackButton onPress={hangleGoBack}>
+          <Icon name="chevron-left" size={24} color="#181818" />
+        </BackButton>
 
-        <ProfileButton onPress={navigateToProfile}>
-          <UserAvatar source={{ uri: user.avatar_url }} />
-        </ProfileButton>
+        <HeaderTitle>Minhas denúncias</HeaderTitle>
       </Header>
 
-      <CategoryList
-        data={categories}
+      <DenunciationList
+        data={denunciations}
         keyExtractor={(category) => category.id}
-        ListHeaderComponent={<CategoryListTitle>Categorias</CategoryListTitle>}
-        renderItem={({ item: category }) => (
-          <CategoryContainer
-            onPress={() => navigateToCreateDenunciation(category.id)}
+        renderItem={({ item: denunciation }) => (
+          <DenunciationContainer
+            onPress={() => navigateToCreateDetails(denunciation.id)}
           >
-            <CategoryImage source={{ uri: category.icon_url }} />
-            <CategoryInfo>
-              <CategoryTitle>{category.title}</CategoryTitle>
-            </CategoryInfo>
-          </CategoryContainer>
+            <DenunciationInfo>
+              <DenunciationTitle>{denunciation.title}</DenunciationTitle>
+              <DenunciationMeta>
+                <Icon name="more-horizontal" size={14} color="#ff0000" />
+                <DenunciationMetaDescription>
+                  {denunciation.description}
+                </DenunciationMetaDescription>
+              </DenunciationMeta>
+              <DenunciationMeta>
+                <Icon name="calendar" size={14} color="#ff0000" />
+                <DenunciationMetaDescription>
+                  {formattedDate(new Date(denunciation.hour))}
+                </DenunciationMetaDescription>
+              </DenunciationMeta>
+            </DenunciationInfo>
+          </DenunciationContainer>
         )}
       />
     </Container>

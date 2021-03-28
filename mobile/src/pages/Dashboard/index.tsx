@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import Icon from 'react-native-vector-icons/Feather';
 import { useAuth } from '../../hooks/auth';
 
 import {
@@ -16,6 +17,7 @@ import {
   CategoryInfo,
   CategoryTitle,
   CategoryListTitle,
+  MyDenunciationsBurron,
 } from './styles';
 import api from '../../services/api';
 
@@ -41,6 +43,10 @@ const Dashbord: React.FC = () => {
     navigate('Profile');
   }, [navigate]);
 
+  const navigateToListDenunciation = useCallback(() => {
+    navigate('ListDenunciation');
+  }, [navigate]);
+
   const navigateToCreateDenunciation = useCallback(
     (categoryId: string) => {
       navigate('CreateDenunciation', { categoryId });
@@ -60,6 +66,10 @@ const Dashbord: React.FC = () => {
           <UserAvatar source={{ uri: user.avatar_url }} />
         </ProfileButton>
       </Header>
+
+      <MyDenunciationsBurron onPress={navigateToListDenunciation}>
+        <Icon name="list" size={24} color="#999591" />
+      </MyDenunciationsBurron>
 
       <CategoryList
         data={categories}

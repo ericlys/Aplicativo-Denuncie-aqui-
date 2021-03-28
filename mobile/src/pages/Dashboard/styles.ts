@@ -52,8 +52,15 @@ export const CategoryListTitle = styled.Text`
 export const CategoryContainer = styled(RectButton)`
   background: #f7f7f7;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   margin-bottom: 16px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const MyDenunciationsBurron = styled(RectButton)`
+  width: 60px;
+  padding: 15px;
   flex-direction: row;
   align-items: center;
 `;
