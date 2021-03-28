@@ -4,6 +4,7 @@ import { classToClass } from 'class-transformer';
 
 import CreateDenunciationService from '@modules/denunciations/services/CreateDenunciationService';
 import ListDenunciationService from '@modules/denunciations/services/ListDenunciationService';
+import ListUserDenunciationService from '@modules/denunciations/services/ListUserDenunciationService';
 
 export default class DenunciationsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -57,6 +58,18 @@ export default class DenunciationsController {
   public async index(request: Request, response: Response): Promise<Response> {
     const listDenunciations = container.resolve(ListDenunciationService);
     const denunciations = await listDenunciations.execute();
+    return response.json(classToClass(denunciations));
+  }
+
+  public async findByUser(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const listUserDenunciations = container.resolve(
+      ListUserDenunciationService,
+    );
+    const user_id = request.user.id;
+    const denunciations = await listUserDenunciations.execute(user_id);
     return response.json(classToClass(denunciations));
   }
 }

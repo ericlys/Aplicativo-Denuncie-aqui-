@@ -17,5 +17,6 @@ denunciationsRouters.post(
   denunciationsController.create,
 );
 denunciationsRouters.get('/', denunciationsController.index);
+denunciationsRouters.get('/my', denunciationsController.findByUser);
 
 export default denunciationsRouters;

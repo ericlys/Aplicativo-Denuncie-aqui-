@@ -5,4 +5,5 @@ export default interface IDenunciationsRepository {
   create(data: ICreateDenunciationDTO): Promise<Denunciation>;
   save(denunciation: Denunciation): Promise<Denunciation>;
   index(): Promise<Denunciation[]>;
+  findByUserId(id: string): Promise<Denunciation[]> | undefined;
 }

@@ -43,5 +43,9 @@ class DenunciationsRepository implements IDenunciationsRepository {
   public async index(): Promise<Denunciation[]> {
     return this.ormRepository.find();
   }
+
+  findByUserId(id: string): Promise<Denunciation[]> {
+    return this.ormRepository.find({ where: { user: id } });
+  }
 }
 export default DenunciationsRepository;
