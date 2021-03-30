@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
@@ -21,14 +22,23 @@ import getValidationErrors from '../../utils/getValidationErros';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
+import { useAuth } from '../../hooks/auth';
+
 import {
   Container,
   Title,
   BackButton,
   UserAvatarButton,
   UserAvatar,
+  QuitButton,
+  ModalContainer,
+  ModalText,
+  ModalButtonCancel,
+  ModalButtonConfirm,
+  ModalButtonTextCancel,
+  ModalButtonTextConfirm,
+  ModalContainerMeta,
 } from './styles';
-import { useAuth } from '../../hooks/auth';
 
 interface ProfileFormData {
   name: string;
@@ -40,6 +50,8 @@ interface ProfileFormData {
 }
 
 const SignUp: React.FC = () => {
+  const { signOut } = useAuth();
+  const [modal, setModal] = useState(false);
   const { user, updateUser } = useAuth();
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
@@ -74,7 +86,10 @@ const SignUp: React.FC = () => {
               then: Yup.string().required('Campo obrigatório'),
               otherwise: Yup.string(),
             })
-            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta'),
+            .oneOf(
+              [Yup.ref('password'), null || undefined],
+              'Confirmação incorreta',
+            ),
         });
 
         await schema.validate(data, {
@@ -173,6 +188,35 @@ const SignUp: React.FC = () => {
           contentContainerStyle={{ flexGrow: 1 }}
         >
           <Container>
+            <Modal
+              animationType="slide"
+              transparent
+              visible={modal}
+              onRequestClose={() => {
+                setModal(!modal);
+              }}
+            >
+              <ModalContainer>
+                <ModalContainerMeta>
+                  <ModalText>
+                    Deseja desvincular sua conta deste aplicativo?
+                  </ModalText>
+
+                  <ModalButtonConfirm onPress={signOut}>
+                    <ModalButtonTextConfirm>Confirmar</ModalButtonTextConfirm>
+                  </ModalButtonConfirm>
+
+                  <ModalButtonCancel
+                    onPress={() => {
+                      setModal(!modal);
+                    }}
+                  >
+                    <ModalButtonTextCancel>Cancelar</ModalButtonTextCancel>
+                  </ModalButtonCancel>
+                </ModalContainerMeta>
+              </ModalContainer>
+            </Modal>
+
             <BackButton onPress={hangleGoBack}>
               <Icon name="chevron-left" size={24} color="#999591" />
             </BackButton>
@@ -180,6 +224,13 @@ const SignUp: React.FC = () => {
             <UserAvatarButton onPress={handleUpdateAvatar}>
               <UserAvatar source={{ uri: user.avatar_url }} />
             </UserAvatarButton>
+            <QuitButton
+              onPress={() => {
+                setModal(!modal);
+              }}
+            >
+              <Icon name="log-out" size={24} color="#e42929" />
+            </QuitButton>
             <View>
               <Title>Meu Perfil</Title>
             </View>
