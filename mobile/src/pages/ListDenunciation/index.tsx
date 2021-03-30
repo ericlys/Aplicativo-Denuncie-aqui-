@@ -47,7 +47,7 @@ const ListDenunciation: React.FC = () => {
     navigation.goBack();
   }, [navigation]);
 
-  const navigateToCreateDetails = useCallback(
+  const navigateToShowDetails = useCallback(
     (denunciationId: string) => {
       navigate('ShowDenunciation', { denunciationId });
     },
@@ -69,7 +69,7 @@ const ListDenunciation: React.FC = () => {
         keyExtractor={(category) => category.id}
         renderItem={({ item: denunciation }) => (
           <DenunciationContainer
-            onPress={() => navigateToCreateDetails(denunciation.id)}
+            onPress={() => navigateToShowDetails(denunciation.id)}
           >
             <DenunciationInfo>
               <DenunciationTitle>{denunciation.title}</DenunciationTitle>
