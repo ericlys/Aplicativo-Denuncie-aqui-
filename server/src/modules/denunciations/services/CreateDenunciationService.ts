@@ -2,7 +2,8 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import IStorageProvider from '@shared/container/providers/StorageProviders/model/IStorageProvider';
+import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
+import ICacheUserAnonymous from '@shared/container/providers/CacheAnonymousUser/models/ICacheUserAnonymous';
 import IDenunciationsRepository from '../repositories/IDenunciationsRepository';
 import IAddressesRepository from '../repositories/IAddressesRepository';
 import ICategoriesRepository from '../repositories/ICategoriesRepository';
@@ -41,13 +42,26 @@ class CreateDenunciationService {
     private categoriesRepository: ICategoriesRepository,
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
+    @inject('CacheUserAnonymous')
+    private cacheUserAnonymous: ICacheUserAnonymous,
   ) {}
 
   public async execute(data: IRequest): Promise<Denunciation> {
-    const checkUserId = await this.usersRepository.findById(data.user_id);
+    let userAnonymousId = null;
+    const checkUserAnonymous = await this.cacheUserAnonymous.recover(
+      data.user_id,
+    );
 
-    if (!checkUserId) {
-      throw new AppError('Error identifying user', 401);
+    if (!checkUserAnonymous) {
+      const checkUserId = await this.usersRepository.findById(data.user_id);
+
+      if (!checkUserId) {
+        throw new AppError('Error identifying user', 401);
+      }
+    } else {
+      userAnonymousId = data.user_id;
+      data.user_id = process.env.UUID_ANONYMOUS_USER;
+      data.anonymous = true;
     }
 
     const checkCategoryId = await this.categoriesRepository.findById(
@@ -88,6 +102,7 @@ class CreateDenunciationService {
       user_id: data.user_id,
       category_id: data.category_id,
       address: addres,
+      userAnonymousId,
     });
 
     return denunciation;

@@ -10,4 +10,5 @@ export default interface ICreateDenunciationDTO {
   user_id: string;
   category_id: string;
   address: Address;
+  userAnonymousId: string;
 }

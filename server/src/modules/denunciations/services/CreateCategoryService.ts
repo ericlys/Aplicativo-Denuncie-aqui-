@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import IStorageProvider from '@shared/container/providers/StorageProviders/model/IStorageProvider';
+import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
 import ICategoriesRepository from '../repositories/ICategoriesRepository';
 import Category from '../infra/typeorm/entities/Category';
 

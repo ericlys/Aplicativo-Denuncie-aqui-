@@ -55,6 +55,9 @@ class Denunciation {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column({ nullable: true })
+  userAnonymousId: string;
+
   @Expose({ name: 'photo_url' })
   getAvatarUrl(): string | null {
     return this.photo ? `${process.env.APP_API_URL}/files/${this.photo}` : null;
