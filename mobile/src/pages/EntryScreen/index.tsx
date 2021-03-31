@@ -1,20 +1,18 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Image,
   View,
   KeyboardAvoidingView,
   Platform,
-  TextInput,
   Alert,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import * as Yup from 'yup';
 
-import { FormHandles } from '@unform/core';
+import Recaptcha, { RecaptchaHandles } from 'react-native-recaptcha-that-works';
+import { RECAPTCHA_BASE_URL, RECAPTCHA_SITY_KEY } from '@env';
 import { useAuth } from '../../hooks/auth';
-
-import getValidationErrors from '../../utils/getValidationErros';
 
 import logoImg from '../../assets/logo.png';
 
@@ -27,57 +25,56 @@ import {
   EntryButtonAnonymouslyText,
   EntryButtonAccount,
   EntryButtonAccountText,
+  ModalContainer,
+  ModalContainerMeta,
+  ModalText,
+  ModalButtonConfirm,
+  ModalButtonTextConfirm,
+  ModalButtonCancel,
+  ModalInputText,
+  ModalErrText,
 } from './styles';
 
-interface SignInFormData {
-  email: string;
-  password: string;
-}
-
 const EntryScreen: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
-  const passwordInputRef = useRef<TextInput>(null);
-
   const navigation = useNavigation();
+  const [modal, setModal] = useState(false);
+  const [err, setErr] = useState<string>();
+  const [nickname, setNickname] = useState<string>();
+  const recaptcha = useRef<RecaptchaHandles>(null);
 
-  const { signIn } = useAuth();
+  const { signInAnonymous } = useAuth();
 
-  const handleSignIn = useCallback(
-    async (data: SignInFormData) => {
+  const handleUserAnonymous = useCallback(() => {
+    if (!nickname) {
+      setErr('Campo obrigatório');
+      return;
+    }
+    recaptcha.current?.open();
+  }, [nickname]);
+
+  const onVerify = useCallback(
+    async (token: string) => {
       try {
-        formRef.current?.setErrors({});
-        const schema = Yup.object().shape({
-          email: Yup.string()
-            .required('Email obrigatório')
-            .email('Digite um e-mail válido'),
-          password: Yup.string().required('Senha obrigatória'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        await signIn({
-          email: data.email,
-          password: data.password,
-        });
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
-
-          formRef.current?.setErrors(errors);
-
-          return;
+        if (nickname) {
+          await signInAnonymous(nickname);
         }
-
+      } catch (er) {
         Alert.alert(
           'Erro na autenticação',
-          'Ocorreu um erro ao fazer login, cheque as credenciais.',
+          'Ocorreu um erro ao fazer o login anônimo tente novamente mais tarde',
         );
       }
     },
-    [signIn],
+    [nickname, signInAnonymous],
   );
+
+  const onExpire = useCallback(() => {
+    setErr('Tempo expirado');
+  }, []);
+
+  const onError = useCallback(async () => {
+    setErr('Falha ao carregar verificação');
+  }, []);
 
   return (
     <>
@@ -87,7 +84,53 @@ const EntryScreen: React.FC = () => {
         enabled
       >
         <Container>
+          <Modal
+            animationType="slide"
+            transparent
+            visible={modal}
+            onRequestClose={() => {
+              setModal(!modal);
+            }}
+          >
+            <ModalContainer>
+              <ModalContainerMeta>
+                <ModalButtonCancel
+                  onPress={() => {
+                    setErr('');
+                    setModal(!modal);
+                  }}
+                >
+                  <Icon name="x" size={20} color="#bb1818" />
+                </ModalButtonCancel>
+                <ModalText>Digite um apelido:</ModalText>
+                <ModalInputText
+                  maxLength={20}
+                  onChangeText={(text) => {
+                    setNickname(text);
+                    setErr('');
+                  }}
+                />
+                {!nickname && err ? <ModalErrText>{err}</ModalErrText> : <></>}
+
+                <ModalButtonConfirm onPress={handleUserAnonymous}>
+                  <ModalButtonTextConfirm>Confirmar</ModalButtonTextConfirm>
+                </ModalButtonConfirm>
+              </ModalContainerMeta>
+            </ModalContainer>
+          </Modal>
           <Image source={logoImg} />
+
+          <Recaptcha
+            ref={recaptcha}
+            lang="pt-BR"
+            theme="light"
+            siteKey={RECAPTCHA_SITY_KEY}
+            baseUrl={RECAPTCHA_BASE_URL}
+            onVerify={onVerify}
+            onExpire={onExpire}
+            onError={onError}
+            size="normal"
+          />
 
           <View>
             <Title>Como deseja entrar:</Title>
@@ -98,7 +141,11 @@ const EntryScreen: React.FC = () => {
             <EntryButtonAccountText>Tenho conta</EntryButtonAccountText>
           </EntryButtonAccount>
 
-          <EntryButtonAnonymously>
+          <EntryButtonAnonymously
+            onPress={() => {
+              setModal(!modal);
+            }}
+          >
             <Icon name="user-x" size={20} color="#ffffff" />
             <EntryButtonAnonymouslyText>
               Anonimamente

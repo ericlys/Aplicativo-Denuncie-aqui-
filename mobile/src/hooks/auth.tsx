@@ -30,6 +30,7 @@ interface AuthContextData {
   user: User;
   loading: boolean;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signInAnonymous(nickname: string): Promise<void>;
   signOut(): void;
   updateUser(user: User): Promise<void>;
 }
@@ -65,6 +66,21 @@ const AuthProvider: React.FC = ({ children }) => {
     const reponse = await api.post('sessions', { email, password });
 
     const { token, user } = reponse.data;
+
+    await AsyncStorage.multiSet([
+      ['@AppDenuncia:token', token],
+      ['@AppDenuncia:user', JSON.stringify(user)],
+    ]);
+
+    api.defaults.headers.authorization = `Bearer ${token}`;
+
+    setData({ token, user });
+  }, []);
+
+  const signInAnonymous = useCallback(async (nickname) => {
+    const reponse = await api.post('sessions/anonymously', { nickname });
+
+    const { token, user } = reponse.data;
     await AsyncStorage.multiSet([
       ['@AppDenuncia:token', token],
       ['@AppDenuncia:user', JSON.stringify(user)],
@@ -95,7 +111,14 @@ const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user: data.user, loading, signIn, signOut, updateUser }}
+      value={{
+        user: data.user,
+        loading,
+        signIn,
+        signInAnonymous,
+        signOut,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
