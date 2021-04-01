@@ -92,6 +92,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signOut = useCallback(async () => {
+    await api.post('sessions/anonymously/invalidate');
     await AsyncStorage.multiRemove(['@AppDenuncia:token', '@AppDenuncia:user']);
 
     setData({} as AuthState);

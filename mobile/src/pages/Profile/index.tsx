@@ -247,7 +247,7 @@ const SignUp: React.FC = () => {
                 }}
               />
 
-              {user.cpf ? (
+              {user.cpf && (
                 <>
                   <Input
                     ref={cpfInputRef}
@@ -322,8 +322,6 @@ const SignUp: React.FC = () => {
                     Confirmar Mudanças
                   </Button>
                 </>
-              ) : (
-                <></>
               )}
             </Form>
           </Container>

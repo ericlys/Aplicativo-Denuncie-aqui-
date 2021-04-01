@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 
 import Recaptcha, { RecaptchaHandles } from 'react-native-recaptcha-that-works';
-import { RECAPTCHA_BASE_URL, RECAPTCHA_SITY_KEY } from '@env';
+import { RECAPTCHA_BASE_URL, RECAPTCHA_SITE_KEY } from '@env';
 import { useAuth } from '../../hooks/auth';
 
 import logoImg from '../../assets/logo.png';
@@ -54,6 +54,7 @@ const EntryScreen: React.FC = () => {
 
   const onVerify = useCallback(
     async (token: string) => {
+      console.log(token);
       try {
         if (nickname) {
           await signInAnonymous(nickname);
@@ -124,7 +125,7 @@ const EntryScreen: React.FC = () => {
             ref={recaptcha}
             lang="pt-BR"
             theme="light"
-            siteKey={RECAPTCHA_SITY_KEY}
+            siteKey={RECAPTCHA_SITE_KEY}
             baseUrl={RECAPTCHA_BASE_URL}
             onVerify={onVerify}
             onExpire={onExpire}
