@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
 import AutenticateAnonymouslyUserService from '@modules/users/services/AutenticateAnonymouslyUserService';
+import InvalidateAnonymouslyUserService from '@modules/users/services/InvalidateAnonymouslyUserService';
 
 export default class SessionsAnonymouslyController {
   async create(request: Request, response: Response): Promise<Response> {
@@ -17,5 +18,15 @@ export default class SessionsAnonymouslyController {
     });
 
     return response.json({ user: classToClass(user), token });
+  }
+
+  async invalidate(request: Request): Promise<void> {
+    const user_id = request.user.id;
+
+    const invalidateUser = container.resolve(InvalidateAnonymouslyUserService);
+
+    await invalidateUser.execute({
+      user_id,
+    });
   }
 }
