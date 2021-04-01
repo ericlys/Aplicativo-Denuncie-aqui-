@@ -20,7 +20,7 @@ export default class SessionsAnonymouslyController {
     return response.json({ user: classToClass(user), token });
   }
 
-  async invalidate(request: Request): Promise<void> {
+  async invalidate(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 
     const invalidateUser = container.resolve(InvalidateAnonymouslyUserService);
@@ -28,5 +28,7 @@ export default class SessionsAnonymouslyController {
     await invalidateUser.execute({
       user_id,
     });
+
+    return response.status(200).json('ok');
   }
 }
