@@ -73,8 +73,8 @@ const EntryScreen: React.FC = () => {
     setErr('Tempo expirado');
   }, []);
 
-  const onError = useCallback(async () => {
-    setErr('Falha ao carregar verificação');
+  const onError = useCallback(async (er) => {
+    Alert.alert(`Falha ao carregar verificação ${er}`);
   }, []);
 
   return (
@@ -129,7 +129,9 @@ const EntryScreen: React.FC = () => {
             baseUrl={RECAPTCHA_BASE_URL}
             onVerify={onVerify}
             onExpire={onExpire}
-            onError={onError}
+            onError={(er) => {
+              onError(er);
+            }}
             size="normal"
           />
 
