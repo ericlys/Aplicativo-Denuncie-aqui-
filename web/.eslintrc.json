@@ -4,9 +4,10 @@
       "es2021": true
   },
   "extends": [
-      "plugin:react/recommended",
-      "airbnb",
-      "plugin:@typescript-eslint/recommended"
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,14 +18,16 @@
       "sourceType": "module"
   },
   "plugins": [
-      "react",
-      "react-hooks",
-      "@typescript-eslint",
-      "prettier"
-  ],
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier"],
   "rules": {
+  "camelcase":"off",
   "prettier/prettier": "error",
   "no-use-before-define": "off",
+  "react/jsx-props-no-spreading": "off",
+  "react/prop-types": "off",
   "@typescript-eslint/no-use-before-define": ["error"],
   "react-hooks/rules-of-hooks": "error",
   "react-hooks/exhaustive-deps": "warn",
