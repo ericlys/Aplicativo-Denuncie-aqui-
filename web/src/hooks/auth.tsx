@@ -47,10 +47,12 @@ export const AuthProvider: React.FC = ({ children }) => {
     });
     const { token, user } = response.data;
 
-    localStorage.setItem('@DenuncieAqui:token', token);
-    localStorage.setItem('@DenuncieAqui:user', JSON.stringify(user));
+    if (user.administrator) {
+      localStorage.setItem('@DenuncieAqui:token', token);
+      localStorage.setItem('@DenuncieAqui:user', JSON.stringify(user));
 
-    setData({ token, user });
+      setData({ token, user });
+    }
   }, []);
 
   const signOut = useCallback(() => {
