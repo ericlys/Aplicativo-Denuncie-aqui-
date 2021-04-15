@@ -7,6 +7,9 @@ import '@modules/users/providers';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
+import UserTokenRepository from '@modules/users/infra/typeorm/repositories/UserTokensRepository';
+
 import IDenunciationsRepository from '@modules/denunciations/repositories/IDenunciationsRepository';
 import DenunciationsRepository from '@modules/denunciations/infra/typeorm/repositories/DenunciationsRepository';
 
@@ -34,4 +37,9 @@ container.registerSingleton<IAddressesRepository>(
 container.registerSingleton<ICategoriesRepository>(
   'CategoriesRepository',
   CategoriesRepository,
+);
+
+container.registerSingleton<IUserTokensRepository>(
+  'UserTokenRepository',
+  UserTokenRepository,
 );
