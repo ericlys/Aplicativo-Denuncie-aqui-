@@ -1,3 +1,4 @@
 import './StorageProviders';
-import './MailProvider';
 import './CacheAnonymousUser';
+import './MailTemplateProvider';
+import './MailProvider';
