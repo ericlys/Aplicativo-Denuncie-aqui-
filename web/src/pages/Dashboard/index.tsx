@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FiPower } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import { Container, Header, HeaderContent, Profile } from './styles';
 
 import logoImg from '../../assets/logo.png';
@@ -19,7 +20,9 @@ const Dashboard: React.FC = () => {
             <img src={user.avatar_url} alt={user.name} />
             <div>
               <span>Bem-vindo,</span>
-              <strong>{user.name}</strong>
+              <Link to="/profile">
+                <strong>{user.name}</strong>
+              </Link>
             </div>
           </Profile>
 
