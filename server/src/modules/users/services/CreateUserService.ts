@@ -1,9 +1,11 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import { injectable, inject } from 'tsyringe';
+import path from 'path';
 
 import { cpf } from 'cpf-cnpj-validator';
 import { hash } from 'bcryptjs';
 import AppError from '@shared/errors/AppError';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -19,6 +21,8 @@ class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    @inject('MailProvider')
+    private mailProvider: IMailProvider,
   ) {}
 
   public async execute({
@@ -55,6 +59,30 @@ class CreateUserService {
       password: hashedPassword,
       administrator,
     });
+
+    const forgotPasswordEmailTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'autenticate_user.hbs',
+    );
+
+    if (!user.checked) {
+      await this.mailProvider.sendMail({
+        to: {
+          name: user.name,
+          email: user.email,
+        },
+        subject: '[DenuncieAqui] Recuperação de senha',
+        templateData: {
+          file: forgotPasswordEmailTemplate,
+          variables: {
+            name: user.name,
+            link: `${process.env.APP_API_URL}/users/activation/${user.id}`,
+          },
+        },
+      });
+    }
 
     return user;
   }

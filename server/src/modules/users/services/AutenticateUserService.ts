@@ -1,10 +1,12 @@
 import { compare } from 'bcryptjs';
+import path from 'path';
 import { sign } from 'jsonwebtoken';
 
 import User from '@modules/users/infra/typeorm/entities/User';
-import Mail from '@modules/users/infra/http/lib/Mail';
 import authConfig from '@config/auth';
 import { injectable, inject } from 'tsyringe';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
+
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -23,6 +25,8 @@ class AuthenticateUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    @inject('MailProvider')
+    private mailProvider: IMailProvider,
   ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -38,11 +42,27 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
+    const forgotPasswordEmailTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'autenticate_user.hbs',
+    );
+
     if (!user.checked) {
-      await Mail.sendMail({
-        to: user.email,
-        subject: 'Confirmação de conta',
-        html: `<a href="<a href="http://localhost:3333/users/activation/${user.id}">Clique aqui para confirmar sua conta</a>, ou copie e colo o link no navegador: <a href="http://localhost:3333/users/activation/${user.id}">http://localhost:3333/users/activation/${user.id}</a>`,
+      await this.mailProvider.sendMail({
+        to: {
+          name: user.name,
+          email: user.email,
+        },
+        subject: '[DenuncieAqui] Recuperação de senha',
+        templateData: {
+          file: forgotPasswordEmailTemplate,
+          variables: {
+            name: user.name,
+            link: `http://localhost:3333/users/activation/${user.id}`,
+          },
+        },
       });
       throw new Error('Check email for account confirmation');
     }
