@@ -1,7 +1,9 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Raw } from 'typeorm';
 
 import ICreateDenunciationDTO from '@modules/denunciations/dtos/ICreateDenunciationDTO';
 import IDenunciationsRepository from '@modules/denunciations/repositories/IDenunciationsRepository';
+import IFindAllInDayDTO from '@modules/denunciations/dtos/IFindAllInDayDTO';
+import IPaginateDTO from '@modules/denunciations/dtos/IPaginateDTO';
 import Denunciation from '../entities/Denunciation';
 
 class DenunciationsRepository implements IDenunciationsRepository {
@@ -48,11 +50,67 @@ class DenunciationsRepository implements IDenunciationsRepository {
     return this.ormRepository.find();
   }
 
+  public async findAllDay({
+    day,
+    month,
+    year,
+    page,
+    totalPerPage,
+  }: IFindAllInDayDTO): Promise<IPaginateDTO> {
+    const parsedDay = String(day).padStart(2, '0');
+    const parsedMonth = String(month).padStart(2, '0');
+
+    const [denunciations, total] = await this.ormRepository.findAndCount({
+      where: {
+        hour: Raw(
+          hourFieldName => `to_char(${hourFieldName},
+              'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+        ),
+      },
+      take: totalPerPage,
+      skip: totalPerPage * (page - 1),
+    });
+
+    return {
+      data: denunciations,
+      total,
+    };
+  }
+
+  public async findAllDayByCategory({
+    day,
+    month,
+    year,
+    category_id,
+    page,
+    totalPerPage,
+  }: IFindAllInDayDTO): Promise<IPaginateDTO> {
+    const parsedDay = String(day).padStart(2, '0');
+    const parsedMonth = String(month).padStart(2, '0');
+
+    const [denunciations, total] = await this.ormRepository.findAndCount({
+      where: {
+        category: category_id,
+        hour: Raw(
+          hourFieldName => `to_char(${hourFieldName},
+              'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+        ),
+      },
+      take: totalPerPage,
+      skip: totalPerPage * (page - 1),
+    });
+
+    return {
+      data: denunciations,
+      total,
+    };
+  }
+
   public async findByUserId(id: string): Promise<Denunciation[]> {
     return this.ormRepository.find({ where: { user: id } });
   }
 
-  findByUserAnonymousId(id: string): Promise<Denunciation[]> {
+  public async findByUserAnonymousId(id: string): Promise<Denunciation[]> {
     return this.ormRepository.find({ where: { userAnonymousId: id } });
   }
 
@@ -66,4 +124,5 @@ class DenunciationsRepository implements IDenunciationsRepository {
     this.ormRepository.delete(id);
   }
 }
+
 export default DenunciationsRepository;
