@@ -69,6 +69,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
       },
       take: totalPerPage,
       skip: totalPerPage * (page - 1),
+      order: { hour: 'ASC' },
     });
 
     return {
@@ -98,6 +99,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
       },
       take: totalPerPage,
       skip: totalPerPage * (page - 1),
+      order: { hour: 'ASC' },
     });
 
     return {
