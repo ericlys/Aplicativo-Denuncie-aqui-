@@ -99,6 +99,35 @@ export const Complaints = styled.div`
   }
 `;
 
+export const Status = styled.div`
+  margin-top: 10px;
+
+  span {
+    font-size: 12px;
+    margin-left: 12px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    color: #636363;
+    font-weight: 500;
+  }
+
+  .constatando {
+    background: #ffd294;
+  }
+
+  .falsa {
+    background: #ff9494;
+  }
+
+  .pendente {
+    background: #e0e0e0;
+  }
+
+  .verificado {
+    background: #98ff94;
+  }
+`;
+
 export const Section = styled.section`
   margin-top: 48px;
 `;
@@ -143,6 +172,22 @@ export const Denunciations = styled.div`
     text-overflow: ellipsis;
     width: 450px;
     display: block;
+  }
+
+  .constatando {
+    background: #ffd294;
+  }
+
+  .falsa {
+    background: #ff9494;
+  }
+
+  .pendente {
+    background: #e0e0e0;
+  }
+
+  .verificado {
+    background: #98ff94;
   }
 
   span {

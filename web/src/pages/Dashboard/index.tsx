@@ -21,6 +21,7 @@ import {
   Categories,
   Category,
   Paginate,
+  Status,
 } from './styles';
 
 import logoImg from '../../assets/logo2.png';
@@ -32,6 +33,7 @@ interface Denunciation {
   title: string;
   description: string;
   hour: string;
+  status: string;
 }
 
 interface Categories {
@@ -138,11 +140,17 @@ const Dashboard: React.FC = () => {
             <span>{selectedDateAsText}</span>
             <span>{selectedWeekDay}</span>
           </p>
+          <Status>
+            <span className="pendente">Pendente</span>
+            <span className="constatando">Constatando</span>
+            <span className="falsa">Falsa</span>
+            <span className="verificado">Verificado</span>
+          </Status>
           <Section>
             {denunciations.length === 0 && <p> Nenhuma denúncia nessa data </p>}
             {denunciations.map(denunciation => (
               <Denunciations key={denunciation.id}>
-                <div>
+                <div className={denunciation.status}>
                   <main>
                     <h4>{denunciation.title}</h4>
                     <strong>{denunciation.description}</strong>
