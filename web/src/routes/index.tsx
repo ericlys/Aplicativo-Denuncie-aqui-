@@ -8,6 +8,8 @@ import SignUp from '../pages/SignUp';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import Profile from '../pages/Profile';
+import Complaint from '../pages/Complaint';
+import Category from '../pages/Category';
 
 import Dashboard from '../pages/Dashboard';
 
@@ -21,6 +23,8 @@ const Routes: React.FC = () => {
 
       <Route path="/dashboard" component={Dashboard} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
+      <Route path="/category" component={Category} isPrivate />
+      <Route path="/complaint/:id" component={Complaint} isPrivate />
     </Switch>
   );
 };
