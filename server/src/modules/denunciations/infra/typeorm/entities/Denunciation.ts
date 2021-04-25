@@ -38,7 +38,9 @@ class Denunciation {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Category, category => category.denunciations)
+  @ManyToOne(() => Category, category => category.denunciations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 

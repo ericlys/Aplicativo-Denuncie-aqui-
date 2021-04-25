@@ -14,5 +14,6 @@ const upload = multer(uploadConfig);
 
 cateroriesRouters.post('/', upload.single('icon'), cateroriesController.create);
 cateroriesRouters.get('/', cateroriesController.index);
+cateroriesRouters.delete('/:id', cateroriesController.delete);
 
 export default cateroriesRouters;

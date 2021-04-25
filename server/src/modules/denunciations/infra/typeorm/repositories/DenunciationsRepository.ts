@@ -122,7 +122,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
     });
   }
 
-  deleteById(id: string): void {
+  public deleteById(id: string): void {
     this.ormRepository.delete(id);
   }
 }

@@ -11,6 +11,10 @@ class CategoriesRepository implements ICategoriesRepository {
     this.ormRepository = getRepository(Category);
   }
 
+  public deleteById(id: string): void {
+    this.ormRepository.delete(id);
+  }
+
   public async index(): Promise<Category[]> {
     const categories = this.ormRepository.find();
     return categories;
