@@ -64,7 +64,7 @@ export const Profile = styled.div`
 
 export const Content = styled.main`
   max-width: 1120px;
-  margin: 64px auto;
+  margin: 54px auto;
   display: flex;
 `;
 
@@ -99,16 +99,52 @@ export const Complaints = styled.div`
   }
 `;
 
+export const Inf = styled.div`
+  margin-top: 2px;
+
+  span {
+    margin-left: 5px;
+    color: #4a4a4a;
+    font-size: 12px;
+    padding: 3px 5px;
+    border-radius: 15px;
+  }
+
+  .pendente {
+    background: #f7f7f7;
+  }
+  .constatando {
+    background: #ffddb0;
+  }
+  .falsa {
+    background: #ffb0b0;
+  }
+  .verificado {
+    background: #b0ffc4;
+  }
+`;
+
 export const Section = styled.section`
-  margin-top: 48px;
+  margin-top: 28px;
 `;
 
 export const Denunciations = styled.div`
-  & + div {
-    margin-top: 2px;
-  }
-  div {
+  .pendente {
     background: #f7f7f7;
+  }
+  .constatando {
+    background: #ffddb0;
+  }
+  .falsa {
+    background: #ffb0b0;
+  }
+  .verificado {
+    background: #b0ffc4;
+  }
+
+  a {
+    margin-top: 2px;
+    text-decoration: none;
     display: flex;
     align-items: center;
     padding: 6px 20px;
