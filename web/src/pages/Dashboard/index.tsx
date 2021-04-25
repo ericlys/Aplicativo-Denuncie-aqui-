@@ -21,7 +21,7 @@ import {
   Categories,
   Category,
   Paginate,
-  Status,
+  Inf,
 } from './styles';
 
 import logoImg from '../../assets/logo2.png';
@@ -140,17 +140,21 @@ const Dashboard: React.FC = () => {
             <span>{selectedDateAsText}</span>
             <span>{selectedWeekDay}</span>
           </p>
-          <Status>
+          <Inf>
             <span className="pendente">Pendente</span>
             <span className="constatando">Constatando</span>
-            <span className="falsa">Falsa</span>
+            <span className="falsa">Falso</span>
             <span className="verificado">Verificado</span>
-          </Status>
+          </Inf>
           <Section>
             {denunciations.length === 0 && <p> Nenhuma denúncia nessa data </p>}
             {denunciations.map(denunciation => (
               <Denunciations key={denunciation.id}>
-                <div className={denunciation.status}>
+                <Link
+                  className={denunciation.status}
+                  key={denunciation.id}
+                  to={`/complaint/${denunciation.id}`}
+                >
                   <main>
                     <h4>{denunciation.title}</h4>
                     <strong>{denunciation.description}</strong>
@@ -159,7 +163,7 @@ const Dashboard: React.FC = () => {
                     <FiClock />
                     {format(parseISO(denunciation.hour), 'HH:mm')}
                   </span>
-                </div>
+                </Link>
               </Denunciations>
             ))}
           </Section>
