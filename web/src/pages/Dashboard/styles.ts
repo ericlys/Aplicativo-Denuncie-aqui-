@@ -1,5 +1,6 @@
 import { shade } from 'polished';
 import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
 
 export const Container = styled.div``;
 
@@ -20,16 +21,32 @@ export const HeaderContent = styled.div`
 
   button {
     margin-left: auto;
-    background: transparent;
+    background: #666360;
     border: 0;
-  }
 
-  svg {
+    :hover {
+      background: red;
+    }
+  }
+`;
+
+export const ButtonMenu = styled(Button)`
+  span {
+    font-weight: 500;
+    color: #fff;
+    font-family: 'Roboto Slab', serif;
+    font-size: 13px;
+  }
+`;
+
+export const StyledMenu = styled.div`
+  /* svg {
     color: #999591;
     width: 20px;
     height: 20px;
-  }
+  } */
 `;
+
 export const Profile = styled.div`
   display: flex;
   align-items: center;
