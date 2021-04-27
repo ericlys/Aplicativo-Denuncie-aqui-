@@ -4,16 +4,11 @@ import { isToday, format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import 'react-day-picker/lib/style.css';
 import Pagination from '@material-ui/lab/Pagination';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 
-import { FiClock, FiPower } from 'react-icons/fi';
-import { Link, useHistory } from 'react-router-dom';
+import { FiClock } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import {
   Container,
-  Header,
-  HeaderContent,
-  Profile,
   Content,
   Complaints,
   Section,
@@ -24,12 +19,10 @@ import {
   Category,
   Paginate,
   Inf,
-  ButtonMenu,
 } from './styles';
 
-import logoImg from '../../assets/logo2.png';
-import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
+import Header from '../../components/Header';
 
 interface Denunciation {
   id: string;
@@ -45,7 +38,6 @@ interface Categories {
 }
 
 const Dashboard: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const TotalItemsPerPage = 9;
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [denunciations, setDenunciations] = useState<Denunciation[]>([]);
@@ -53,33 +45,12 @@ const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Number>(1);
   const [categories, setCategories] = useState<Categories[]>([]);
   const [categoryEnabled, setCategoryEnabled] = useState<String>();
-  const history = useHistory();
-
-  const handleClick = useCallback(event => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
-
-  const handleCategory = useCallback(() => {
-    setAnchorEl(null);
-    history.push('/category');
-  }, [history]);
-
-  const handleAbstract = useCallback(() => {
-    setAnchorEl(null);
-    history.push('/abstract');
-  }, [history]);
 
   const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
     if (modifiers.available) {
       setSelectedDate(day);
     }
   }, []);
-
-  const { signOut, user } = useAuth();
 
   const selectedDateAsText = useMemo(() => {
     return format(selectedDate, "'Dia' dd 'de' MMMM", {
@@ -135,44 +106,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logoImg} alt="DenuncieAqui" />
-
-          <Profile>
-            <img src={user.avatar_url} alt={user.name} />
-            <div>
-              <span>Bem-vindo,</span>
-              <Link to="/profile">
-                <strong>{user.name}</strong>
-              </Link>
-            </div>
-          </Profile>
-
-          <ButtonMenu
-            className="buttonMenu"
-            onClick={handleClick}
-            aria-controls="customized-menu"
-            aria-haspopup="true"
-            variant="contained"
-          >
-            Menu
-          </ButtonMenu>
-          <Menu
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleCategory}>Categorias</MenuItem>
-            <MenuItem onClick={handleAbstract}>Resumo</MenuItem>
-            <MenuItem onClick={signOut}>
-              <FiPower /> Sair
-            </MenuItem>
-          </Menu>
-        </HeaderContent>
-      </Header>
-
+      <Header />
       <Content>
         <Complaints>
           <h1>Denúncias Recebidas</h1>

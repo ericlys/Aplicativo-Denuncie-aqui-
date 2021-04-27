@@ -3,14 +3,10 @@ import 'react-day-picker/lib/style.css';
 import { useRouteMatch } from 'react-router-dom';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 
-import { FiMap, FiPower } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiMap } from 'react-icons/fi';
 import * as dotenv from 'dotenv';
 import {
   Container,
-  Header,
-  HeaderContent,
-  Profile,
   Content,
   Denunciation,
   Section,
@@ -22,10 +18,9 @@ import {
   Image,
 } from './styles';
 
-import logoImg from '../../assets/logo2.png';
-import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
+import Header from '../../components/Header';
 
 interface DenunciationParams {
   id: string;
@@ -67,7 +62,6 @@ const Complaint: React.FC = () => {
   const { addToast } = useToast();
   const [denunciation, setDenunciation] = useState<Idenunciation>();
   const [status, setStatus] = useState<string>();
-  const { signOut, user } = useAuth();
   const [coordinates, setCoordinates] = useState<Coordinates>({
     lat: 0,
     lng: 0,
@@ -100,25 +94,7 @@ const Complaint: React.FC = () => {
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logoImg} alt="DenuncieAqui" />
-
-          <Profile>
-            <img src={user.avatar_url} alt={user.name} />
-            <div>
-              <span>Bem-vindo,</span>
-              <Link to="/profile">
-                <strong>{user.name}</strong>
-              </Link>
-            </div>
-          </Profile>
-
-          <button type="button" onClick={signOut}>
-            <FiPower />
-          </button>
-        </HeaderContent>
-      </Header>
+      <Header />
 
       <Content>
         <Denunciation>

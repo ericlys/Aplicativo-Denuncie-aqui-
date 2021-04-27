@@ -1,13 +1,9 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import 'react-day-picker/lib/style.css';
 
-import { FiPower, FiTrash2 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiTrash2 } from 'react-icons/fi';
 import {
   Container,
-  Header,
-  HeaderContent,
-  Profile,
   Content,
   NewCategory,
   InputCategory,
@@ -18,10 +14,9 @@ import {
   ButtonDelete,
 } from './styles';
 
-import logoImg from '../../assets/logo2.png';
-import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
+import Header from '../../components/Header';
 
 interface Category {
   title: string;
@@ -36,7 +31,6 @@ const Category: React.FC = () => {
   const [categoryName, setCategoryName] = useState<string>();
   const [icon, setIcon] = useState<string>();
   const [file, setFile] = useState<File>();
-  const { signOut, user } = useAuth();
 
   const handleNewCategory = useCallback(() => {
     if (file && categoryName) {
@@ -89,26 +83,7 @@ const Category: React.FC = () => {
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logoImg} alt="DenuncieAqui" />
-
-          <Profile>
-            <img src={user.avatar_url} alt={user.name} />
-            <div>
-              <span>Bem-vindo,</span>
-              <Link to="/profile">
-                <strong>{user.name}</strong>
-              </Link>
-            </div>
-          </Profile>
-
-          <button type="button" onClick={signOut}>
-            <FiPower />
-          </button>
-        </HeaderContent>
-      </Header>
-
+      <Header />
       <Content>
         <NewCategory>
           <h1>Categoria</h1>
@@ -123,7 +98,7 @@ const Category: React.FC = () => {
             />
             <IconCategory>
               <label htmlFor="avatar">
-                {icon && <img src={icon} alt={user.name} />}
+                {icon && <img src={icon} alt="icon" />}
                 Adicionar Icone
                 <input
                   accept="image/png, image/jpeg"
