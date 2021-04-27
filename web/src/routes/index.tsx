@@ -10,6 +10,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Profile from '../pages/Profile';
 import Complaint from '../pages/Complaint';
 import Category from '../pages/Category';
+import Abstract from '../pages/Abstract';
 
 import Dashboard from '../pages/Dashboard';
 
@@ -24,6 +25,7 @@ const Routes: React.FC = () => {
       <Route path="/dashboard" component={Dashboard} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
       <Route path="/category" component={Category} isPrivate />
+      <Route path="/abstract" component={Abstract} isPrivate />
       <Route path="/complaint/:id" component={Complaint} isPrivate />
     </Switch>
   );
