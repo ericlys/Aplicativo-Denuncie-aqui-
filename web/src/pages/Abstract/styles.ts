@@ -8,19 +8,14 @@ export const Content = styled.main`
   display: flex;
 `;
 
-export const NewCategory = styled.div`
+export const SectionOne = styled.div`
   flex: 1;
   margin-right: 120px;
+`;
 
-  h1 {
-    font-size: 36px;
-  }
-
-  h2 {
-    color: #4a4a4a;
-    margin-top: 23px;
-    font-size: 26px;
-  }
+export const MappContainer = styled.div`
+  width: 700px;
+  height: 400px;
 `;
 
 export const Section = styled.section`
@@ -38,5 +33,25 @@ export const SectionTwo = styled.div`
     margin-top: 69px;
     margin-bottom: 24px;
     font-size: 26px;
+  }
+`;
+
+export const Calendar = styled.aside`
+  .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+    background-color: #fff0f0 !important;
+    color: #e25c4a;
+  }
+  .DayPicker-Day {
+    border-radius: 0 !important;
+  }
+  .DayPicker-Day--start {
+    border-top-left-radius: 50% !important;
+    border-bottom-left-radius: 50% !important;
+    background: #d42424 !important;
+  }
+  .DayPicker-Day--end {
+    border-top-right-radius: 50% !important;
+    border-bottom-right-radius: 50% !important;
+    background: #d42424 !important;
   }
 `;
