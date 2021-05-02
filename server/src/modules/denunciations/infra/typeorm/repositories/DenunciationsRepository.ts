@@ -4,6 +4,7 @@ import ICreateDenunciationDTO from '@modules/denunciations/dtos/ICreateDenunciat
 import IDenunciationsRepository from '@modules/denunciations/repositories/IDenunciationsRepository';
 import IFindAllInDayDTO from '@modules/denunciations/dtos/IFindAllInDayDTO';
 import IPaginateDTO from '@modules/denunciations/dtos/IPaginateDTO';
+import IRangeDayDTO from '@modules/denunciations/dtos/IRangeDayDTO';
 import Denunciation from '../entities/Denunciation';
 
 class DenunciationsRepository implements IDenunciationsRepository {
@@ -64,7 +65,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
       where: {
         hour: Raw(
           hourFieldName => `to_char(${hourFieldName},
-              'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+            'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
       take: totalPerPage,
@@ -94,7 +95,7 @@ class DenunciationsRepository implements IDenunciationsRepository {
         category: category_id,
         hour: Raw(
           hourFieldName => `to_char(${hourFieldName},
-              'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+            'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
       take: totalPerPage,
@@ -106,6 +107,30 @@ class DenunciationsRepository implements IDenunciationsRepository {
       data: denunciations,
       total,
     };
+  }
+
+  public async findByRangeDay({
+    fromDay,
+    fromMonth,
+    fromYear,
+    toDay,
+    toMonth,
+    toYear,
+  }: IRangeDayDTO): Promise<Denunciation[]> {
+    const parsedFromDay = String(fromDay).padStart(2, '0');
+    const parsedToDay = String(toDay).padStart(2, '0');
+    const parsedFromMonth = String(fromMonth).padStart(2, '0');
+    const parsedToMonth = String(toMonth).padStart(2, '0');
+    const denunciations = await this.ormRepository.find({
+      where: {
+        hour: Raw(
+          hourFieldName =>
+            `${hourFieldName} BETWEEN '${fromYear}-${parsedFromMonth}-${parsedFromDay}' AND '${toYear}-${parsedToMonth}-${parsedToDay}'`,
+        ),
+      },
+      relations: ['address'],
+    });
+    return denunciations;
   }
 
   public async findByUserId(id: string): Promise<Denunciation[]> {

@@ -5,11 +5,13 @@ import DenunciationsController from '@modules/denunciations/infra/http/controlle
 import multer from 'multer';
 import uploadConfig from '@config/upload';
 import DenunciationsDayController from '../controllers/DenunciationsDayController';
+import DenunciationsRangeDayController from '../controllers/DenunciationsRangeDayController';
 import StatusController from '../controllers/StatusController';
 
 const denunciationsRouters = Router();
 const denunciationsController = new DenunciationsController();
 const denunciationsDayController = new DenunciationsDayController();
+const denunciationsRangeDayController = new DenunciationsRangeDayController();
 const statusController = new StatusController();
 
 denunciationsRouters.use(ensureAuthenticated);
@@ -22,6 +24,7 @@ denunciationsRouters.post(
 );
 denunciationsRouters.get('/all', denunciationsController.index);
 denunciationsRouters.get('/', denunciationsDayController.index);
+denunciationsRouters.get('/range', denunciationsRangeDayController.index);
 denunciationsRouters.get('/my', denunciationsController.findByUser);
 denunciationsRouters.get('/:id', denunciationsController.findById);
 denunciationsRouters.delete('/:id', denunciationsController.delete);
