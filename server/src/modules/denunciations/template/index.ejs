@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório</title>
+</head>
+<body>
+  <div>
+    <h1>Relatório de denúncias</h1>
+    <h3><%=fromDay%>/<%=fromMonth%>/<%=fromYear%> a <%=toDay%>/<%=toMonth%>/<%=toYear%></h3>
+
+
+    <% if (denunciations.length>0) { %>
+      <% denunciations.forEach(denunciation => { %>
+    <table frame="hsides">
+      <tbody>
+
+            <tr>
+              <td><b>Título:</b><%= denunciation.title %></td>
+              <td><b>Status:</b><%= denunciation.status %></td>
+            </tr>
+            <tr>
+              <td><b>Descrição:</b><%= denunciation.description %></td>
+              <td><b>Endereço:</b><%= denunciation.address.address %>-<%= denunciation.address.street %>, <%= denunciation.address.number %>, <%= denunciation.address.city %>, <%= denunciation.address.zipcode %>, <%= denunciation.address.complement %></td>
+            </tr>
+            <tr>
+              <td><b>hora:</b><%= denunciation.hour %></td>
+              <td><b>Coordenadas:</b><%= denunciation.address.latitude %>, <%= denunciation.address.longitude %></td>
+            </tr>
+      </tbody>
+    </table>
+    <% }); %>
+  <% } %>
+
+          <!-- <thead>
+        <tr>
+          <th>Título</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Endereço</th>
+          <th>Imagem</th>
+          <th>Data e hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (denunciations.length>0) { %>
+          <% denunciations.forEach(denunciation => { %>
+            <tr>
+              <td><%= denunciation.title %></td>
+              <td><%= denunciation.description %></td>
+              <td><%= denunciation.status %></td>
+              <td><%= denunciation.title %></td>
+              <td><%= denunciation.title %></td>
+              <td><%= denunciation.title %></td>
+            </tr>
+            <% }); %>
+          <% } %>
+      </tbody> -->
+      <!-- <tfoot>
+        <tr><td colspan="2"><% denunciations.length%> denúncias</td></tr>
+      </tfoot> -->
+  </div>
+</body>
+</html>
