@@ -133,22 +133,22 @@ const CreateDenunciation: React.FC = () => {
   }, [zipcode]);
 
   const handleCepByLahLong = useCallback(async (coordinate) => {
-    Geocoder.from(coordinate).then((json) => {
-      const addressComponent = json.results[0].formatted_address;
-      const code = addressComponent.substr(addressComponent.length - 17, 9);
-      if (
-        code.slice(5, 6) === '-' &&
-        code.slice(6, 8).match('[0-9]+') != null
-      ) {
-        setZipcode(code);
-        setCoordinates(coordinate);
-        formRef.current?.setData({
-          zipCode: code,
-        });
-        return;
-      }
-      setCoordinates(coordinate);
-    });
+    // Geocoder.from(coordinate).then((json) => {
+    //   const addressComponent = json.results[0].formatted_address;
+    //   const code = addressComponent.substr(addressComponent.length - 17, 9);
+    //   if (
+    //     code.slice(5, 6) === '-' &&
+    //     code.slice(6, 8).match('[0-9]+') != null
+    //   ) {
+    //     setZipcode(code);
+    //     setCoordinates(coordinate);
+    //     formRef.current?.setData({
+    //       zipCode: code,
+    //     });
+    //     return;
+    //   }
+    setCoordinates(coordinate);
+    // });
   }, []);
 
   const updateForm = useCallback((addres: IViacep) => {

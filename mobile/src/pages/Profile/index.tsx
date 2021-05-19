@@ -221,11 +221,10 @@ const SignUp: React.FC = () => {
               <Icon name="chevron-left" size={24} color="#999591" />
             </BackButton>
 
-            {user.avatar_url && (
-              <UserAvatarButton onPress={handleUpdateAvatar}>
-                <UserAvatar source={{ uri: user.avatar_url }} />
-              </UserAvatarButton>
-            )}
+            <UserAvatarButton onPress={handleUpdateAvatar}>
+              <UserAvatar source={{ uri: user.avatar_url }} />
+            </UserAvatarButton>
+
             <QuitButton
               onPress={() => {
                 setModal(!modal);
