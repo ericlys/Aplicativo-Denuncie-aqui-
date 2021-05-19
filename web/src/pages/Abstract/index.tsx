@@ -11,6 +11,7 @@ import {
   MappContainer,
   SectionTwo,
   Calendar,
+  Button,
 } from './styles';
 
 import Header from '../../components/Header';
@@ -45,6 +46,25 @@ const Abstract: React.FC = () => {
     },
     [selectedDates],
   );
+
+  const handleReportPDF = useCallback(() => {
+    if (selectedDates.from && selectedDates.to) {
+      api
+        .get('/denunciation/report', {
+          params: {
+            fromDay: selectedDates.from.getDate(),
+            fromMonth: selectedDates.from.getMonth() + 1,
+            fromYear: selectedDates.from.getFullYear(),
+            toDay: selectedDates.to.getDate(),
+            toMonth: selectedDates.to.getMonth() + 1,
+            toYear: selectedDates.to.getFullYear(),
+          },
+        })
+        .then(response => {
+          window.open(response.data.url);
+        });
+    }
+  }, [selectedDates]);
 
   useEffect(() => {
     if (selectedDates.from && selectedDates.to) {
@@ -81,7 +101,7 @@ const Abstract: React.FC = () => {
                   width: '100%',
                   height: '100%',
                 }}
-                zoom={15}
+                zoom={8}
                 center={{ lat: -6.831743312048982, lng: -38.31587067628734 }}
               >
                 {denunciations.map(denunciation => (
@@ -95,6 +115,9 @@ const Abstract: React.FC = () => {
                       url:
                         'https://img.icons8.com/color/46/000000/coronavirus--v2.png',
                     }}
+                    // onClick={() => {
+                    //   window.open(`/complaint/${denunciation.id}`);
+                    // }}
                   />
                 ))}
               </GoogleMap>
@@ -125,6 +148,9 @@ const Abstract: React.FC = () => {
               ]}
             />
           </Calendar>
+          {selectedDates.from && selectedDates.to && (
+            <Button onClick={handleReportPDF}>Gerar Relatório</Button>
+          )}
         </SectionTwo>
       </Content>
     </Container>

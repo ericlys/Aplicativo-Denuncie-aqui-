@@ -1,3 +1,4 @@
+import { shade } from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div``;
@@ -53,5 +54,21 @@ export const Calendar = styled.aside`
     border-top-right-radius: 50% !important;
     border-bottom-right-radius: 50% !important;
     background: #d42424 !important;
+  }
+`;
+
+export const Button = styled.button`
+  background: #ff1a1a;
+  width: 50%;
+  height: 56px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 16px;
+  color: #fff;
+  font-weight: 500;
+  margin-top: 16px;
+
+  &:hover {
+    background: ${shade(0.2, '#ff1a1a')};
   }
 `;
