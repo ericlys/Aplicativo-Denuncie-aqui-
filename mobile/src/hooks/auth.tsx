@@ -11,8 +11,11 @@ import api from '../services/api';
 interface User {
   id: string;
   name: string;
+  cpf: string;
   email: string;
+  avatar_url: string;
 }
+
 interface AuthState {
   token: string;
   user: User;
@@ -27,7 +30,9 @@ interface AuthContextData {
   user: User;
   loading: boolean;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signInAnonymous(nickname: string): Promise<void>;
   signOut(): void;
+  updateUser(user: User): Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -46,6 +51,8 @@ const AuthProvider: React.FC = ({ children }) => {
       ]);
 
       if (token[1] && user[1]) {
+        api.defaults.headers.authorization = `Bearer ${token[1]}`;
+
         setData({ token: token[1], user: JSON.parse(user[1]) });
       }
 
@@ -59,6 +66,21 @@ const AuthProvider: React.FC = ({ children }) => {
     const reponse = await api.post('sessions', { email, password });
 
     const { token, user } = reponse.data;
+
+    await AsyncStorage.multiSet([
+      ['@AppDenuncia:token', token],
+      ['@AppDenuncia:user', JSON.stringify(user)],
+    ]);
+
+    api.defaults.headers.authorization = `Bearer ${token}`;
+
+    setData({ token, user });
+  }, []);
+
+  const signInAnonymous = useCallback(async (nickname) => {
+    const reponse = await api.post('sessions/anonymously', { nickname });
+
+    const { token, user } = reponse.data;
     await AsyncStorage.multiSet([
       ['@AppDenuncia:token', token],
       ['@AppDenuncia:user', JSON.stringify(user)],
@@ -70,13 +92,35 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signOut = useCallback(async () => {
+    await api.post('sessions/anonymously/invalidate');
     await AsyncStorage.multiRemove(['@AppDenuncia:token', '@AppDenuncia:user']);
 
     setData({} as AuthState);
   }, []);
 
+  const updateUser = useCallback(
+    async (user: User) => {
+      await AsyncStorage.setItem('@AppDenuncia:user', JSON.stringify(user));
+
+      setData({
+        token: data.token,
+        user,
+      });
+    },
+    [setData, data.token],
+  );
+
   return (
-    <AuthContext.Provider value={{ user: data.user, loading, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user: data.user,
+        loading,
+        signIn,
+        signInAnonymous,
+        signOut,
+        updateUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

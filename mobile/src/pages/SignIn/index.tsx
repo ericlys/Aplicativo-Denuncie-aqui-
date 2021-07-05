@@ -8,12 +8,13 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+
+import { useNavigation } from '@react-navigation/native';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import Icon from 'react-native-vector-icons/Feather';
 import { useAuth } from '../../hooks/auth';
 
 import getValidationErrors from '../../utils/getValidationErros';
@@ -28,8 +29,7 @@ import {
   Title,
   ForgotPassword,
   ForgotPasswordText,
-  CreateAccountButton,
-  CreateAccountButtonText,
+  BackButton,
 } from './styles';
 
 interface SignInFormData {
@@ -40,12 +40,9 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
-
   const navigation = useNavigation();
 
-  const { signIn, user } = useAuth();
-
-  console.log(user);
+  const { signIn } = useAuth();
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
@@ -84,6 +81,10 @@ const SignIn: React.FC = () => {
     [signIn],
   );
 
+  const hangleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   return (
     <>
       <KeyboardAvoidingView
@@ -95,6 +96,9 @@ const SignIn: React.FC = () => {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flex: 1 }}
         >
+          <BackButton onPress={hangleGoBack}>
+            <Icon name="chevron-left" size={24} color="#999591" />
+          </BackButton>
           <Container>
             <Image source={logoImg} />
 
@@ -137,17 +141,19 @@ const SignIn: React.FC = () => {
               </Button>
             </Form>
 
-            <ForgotPassword onPress={() => {}}>
+            <ForgotPassword
+              onPress={() => {
+                Alert.alert(
+                  'Recuperacao de conta:',
+                  'Entre em contato com nossa empresa.',
+                );
+              }}
+            >
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
-
-      <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
-        <Icon name="log-in" size={20} color="#bb1818" />
-        <CreateAccountButtonText>Crie uma conta</CreateAccountButtonText>
-      </CreateAccountButton>
     </>
   );
 };

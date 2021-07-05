@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import Entry from '../pages/EntryScreen';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 
@@ -13,6 +14,7 @@ const AuthRoutes: React.FC = () =>
     cardStyle: {backgroundColor: '#FFFF'}
   }}
   >
+  <Auth.Screen name="Entry" component={Entry}/>
   <Auth.Screen name="SignIn" component={SignIn}/>
   <Auth.Screen name="SignUp" component={SignUp}/>
 </Auth.Navigator> ;

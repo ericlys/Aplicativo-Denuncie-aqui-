@@ -11,6 +11,9 @@ import {
 import User from '@modules/users/infra/typeorm/entities/User';
 import Address from '@modules/denunciations/infra/typeorm/entities/Address';
 
+import { Expose } from 'class-transformer';
+import Category from './Category';
+
 @Entity('denunciations')
 class Denunciation {
   @PrimaryGeneratedColumn('uuid')
@@ -35,7 +38,14 @@ class Denunciation {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @ManyToOne(() => Category, category => category.denunciations, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
+
   @OneToOne(() => Address, denunciation => denunciation.address)
+  @JoinColumn()
   address: Address;
 
   @CreateDateColumn()
@@ -46,6 +56,14 @@ class Denunciation {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Column({ nullable: true })
+  userAnonymousId: string;
+
+  @Expose({ name: 'photo_url' })
+  getAvatarUrl(): string | null {
+    return this.photo ? `${process.env.APP_API_URL}/files/${this.photo}` : null;
+  }
 }
 
 export default Denunciation;

@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 export const Container = styled.View`
   flex: 1;
@@ -26,24 +25,10 @@ export const ForgotPasswordText = styled.Text`
   font-family: 'RobotoSlab-Regular';
 `;
 
-export const CreateAccountButton = styled.TouchableOpacity`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: #ffffff;
-  border-top-width: 1px;
-  border-color: #e5e5e5;
-  padding: 16px 0 ${16 + getBottomSpace()}px;
-
+export const BackButton = styled.TouchableOpacity`
+  margin-top: 32px;
   display: flex;
-  justify-content: center;
+  padding: 0 23px;
   flex-direction: row;
-`;
-
-export const CreateAccountButtonText = styled.Text`
-  color: #bb1818;
-  font-size: 18px;
-  font-family: 'RobotoSlab-Regular';
-  margin-left: 16px;
+  justify-content: space-between;
 `;
